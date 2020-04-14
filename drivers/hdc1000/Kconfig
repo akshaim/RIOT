@@ -1,0 +1,34 @@
+# Copyright (c) 2020 HAW Hamburg
+#
+# This file is subject to the terms and conditions of the GNU Lesser
+# General Public License v2.1. See the file LICENSE in the top level
+# directory for more details.
+#
+menuconfig KCONFIG_MODULE_HDC1000
+    bool "Configure HDC1000 driver"
+    depends on MODULE_HDC1000
+    help
+        Configure the HDC1000 driver using Kconfig.
+
+if KCONFIG_MODULE_HDC1000
+
+config HDC1000_I2C_ADDRESS
+    hex "HDC1000 I2C ADDRESS"
+    range 0x40 0x43
+    default 0x43
+    help
+        Change the I2C Slave Address.HDC1000 allows for upto 4 devices on Single Bus.
+        The value depends on the state of ADR1 and ADR0 Pins.
+        For more information refer section 8.5.1 in Datasheet (SNAS643C).
+
+config HDC1000_CONVERSION_TIME
+    int "HDC1000 CONVERSION TIME"
+    range 13000 26000
+    default 26000
+    help
+        This time value is chosen twice as large as needed for two 14-bit
+        conversions (worst case) to allow for timer imprecision:
+        (convert temp + convert hum) * 2 -> (6.5ms + 6.5ms) * 2 := 26ms.
+        If both (temp and hum) conversion is not required the value may be halved.
+
+endif # KCONFIG_MODULE_HDC1000
