@@ -26,8 +26,12 @@
 
 #define SLEEP_USEC  (250 * 1000U)
 
+#define STR(x)   #x
+#define SHOW_DEFINE(x) printf("%s=%s\n", #x, STR(x))
+
 int main(void)
 {
+    SHOW_DEFINE(CONFIG_ISL29020_DEFAULT_ADDRESS);
     isl29020_t dev;
 
     puts("ISL29020 light sensor test application\n");
