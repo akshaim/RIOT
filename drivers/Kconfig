@@ -7,4 +7,9 @@
 menu "Drivers"
 rsource "Kconfig.net"
 rsource "periph_common/Kconfig"
+
+menu "Sensor Device Drivers"
+rsource "isl29020/Kconfig"
+endmenu # Sensor Device Drivers
+
 endmenu # Drivers
