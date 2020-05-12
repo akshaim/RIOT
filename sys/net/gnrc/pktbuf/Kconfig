@@ -4,13 +4,13 @@
 # General Public License v2.1. See the file LICENSE in the top level
 # directory for more details.
 #
-menuconfig KCONFIG_MODULE_GNRC_PKTBUF
+menuconfig KCONFIG_MODULE_GNRC_PKTBUF_STATIC
     bool "Configure GNRC_PKTBUF"
     depends on MODULE_GNRC_PKTBUF
     help
         Configure the GNRC_PKTBUF using Kconfig.
 
-if KCONFIG_MODULE_GNRC_PKTBUF
+if KCONFIG_MODULE_GNRC_PKTBUF_STATIC
 
 config GNRC_PKTBUF_SIZE
     int "Maximum size of the static packet buffer"

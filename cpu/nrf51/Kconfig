@@ -6,4 +6,4 @@
 #
 config GNRC_PKTBUF_SIZE
     default 2048
-    depends on KCONFIG_MODULE_GNRC_PKTBUF
+    depends on KCONFIG_MODULE_GNRC_PKTBUF_STATIC
