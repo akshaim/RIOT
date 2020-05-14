@@ -93,8 +93,8 @@ extern "C" {
 /**
  * @brief Number of preallocated receive buffers
  */
-#ifndef GNRC_TCP_RCV_BUFFERS
-#define GNRC_TCP_RCV_BUFFERS (1U)
+#ifndef CONFIG_GNRC_TCP_RCV_BUFFERS
+#define CONFIG_GNRC_TCP_RCV_BUFFERS (1U)
 #endif
 
 /**
