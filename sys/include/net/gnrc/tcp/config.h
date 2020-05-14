@@ -4,6 +4,8 @@
  * This file is subject to the terms and conditions of the GNU Lesser
  * General Public License v2.1. See the file LICENSE in the top level
  * directory for more details.
+ *
+ *
  */
 
 /**
@@ -26,6 +28,28 @@
 extern "C" {
 #endif
 
+/**
+ * @defgroup net_gnrc_tcp_conf GNRC TCP compile configurations
+ * @ingroup net_gnrc_conf
+ *
+ * ## Calculating RTO
+ * To calculate retransmission timeout (RTO), Round Trip Time (RTT) needs to be
+ * taken into account. SRTT (smoothed round-trip time) and RTTVAR (round-trip
+ * time variation) are hence calculated as follows:
+ *
+ *     RTTVAR <- (1 - beta) * RTTVAR + beta * |SRTT - R'|
+ *     SRTT <- (1 - alpha) * SRTT + alpha * R'
+ *
+ * where alpha and beta are constants, and R' is the instantaneous RTT value.
+ *
+ * RTO is then calculated as :
+ *
+ *     RTO <- SRTT + max (G, K*RTTVAR)
+ *
+ * where K is a constant, and G is clock granularity in seconds.
+ * For more information refer to https://tools.ietf.org/html/rfc6298
+ * @{
+ */
 /**
  * @brief Timeout duration for user calls. Default is 2 minutes.
  */
@@ -81,6 +105,10 @@ extern "C" {
 
 /**
  * @brief Lower bound for RTO = 1 sec (see RFC 6298)
+ *
+ * @note Retransmission Timeout (RTO) determines how long TCP waits for
+ * acknowledgment (ACK) of transmitted segment. If the acknowledgment
+ * isn't received within this time it is considered lost.
  */
 #ifndef GNRC_TCP_RTO_LOWER_BOUND
 #define GNRC_TCP_RTO_LOWER_BOUND (1U * US_PER_SEC)
@@ -102,6 +130,7 @@ extern "C" {
 
 /**
  * @brief Alpha value for RTO calculation, default is 1/8
+ *
  */
 #ifndef GNRC_TCP_RTO_A_DIV
 #define GNRC_TCP_RTO_A_DIV (8U)
@@ -134,6 +163,7 @@ extern "C" {
 #ifndef GNRC_TCP_PROBE_UPPER_BOUND
 #define GNRC_TCP_PROBE_UPPER_BOUND (60U * US_PER_SEC)
 #endif
+/** @} */
 
 #ifdef __cplusplus
 }
