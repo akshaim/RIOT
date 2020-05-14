@@ -186,8 +186,9 @@ static int _gnrc_tcp_open(gnrc_tcp_tcb_t *tcb, const gnrc_tcp_ep_t *remote,
         tcb->peer_port = remote->port;
 
         /* Setup connection timeout: Put timeout message in TCBs mbox on expiration */
-        _setup_timeout(&connection_timeout, GNRC_TCP_CONNECTION_TIMEOUT_DURATION,
-                       _cb_mbox_put_msg, &connection_timeout_arg);
+        _setup_timeout(&connection_timeout, \
+            CONFIG_GNRC_TCP_CONNECTION_TIMEOUT_DURATION, \
+            _cb_mbox_put_msg, &connection_timeout_arg);
     }
 
     /* Call FSM with event: CALL_OPEN */
@@ -211,8 +212,9 @@ static int _gnrc_tcp_open(gnrc_tcp_tcb_t *tcb, const gnrc_tcp_ep_t *remote,
                  * send SYN+ACK we received upon entering SYN_RCVD is never acknowledged
                  * by the peer. */
                 if ((tcb->state == FSM_STATE_SYN_RCVD) && (tcb->status & STATUS_PASSIVE)) {
-                    _setup_timeout(&connection_timeout, GNRC_TCP_CONNECTION_TIMEOUT_DURATION,
-                                   _cb_mbox_put_msg, &connection_timeout_arg);
+                    _setup_timeout(&connection_timeout, \
+                        CONFIG_GNRC_TCP_CONNECTION_TIMEOUT_DURATION, \
+                        _cb_mbox_put_msg, &connection_timeout_arg);
                 }
                 break;
 
@@ -493,8 +495,9 @@ ssize_t gnrc_tcp_send(gnrc_tcp_tcb_t *tcb, const void *data, const size_t len,
     }
 
     /* Setup connection timeout: Put timeout message in tcb's mbox on expiration */
-    _setup_timeout(&connection_timeout, GNRC_TCP_CONNECTION_TIMEOUT_DURATION,
-                   _cb_mbox_put_msg, &connection_timeout_arg);
+    _setup_timeout(&connection_timeout, \
+        CONFIG_GNRC_TCP_CONNECTION_TIMEOUT_DURATION, \
+        _cb_mbox_put_msg, &connection_timeout_arg);
 
     /* Setup user specified timeout if timeout_us is greater than zero */
     if (timeout_duration_us > 0) {
@@ -560,8 +563,9 @@ ssize_t gnrc_tcp_send(gnrc_tcp_tcb_t *tcb, const void *data, const size_t len,
                 DEBUG("gnrc_tcp.c : gnrc_tcp_send() : NOTIFY_USER\n");
 
                 /* Connection is alive: Reset Connection Timeout */
-                _setup_timeout(&connection_timeout, GNRC_TCP_CONNECTION_TIMEOUT_DURATION,
-                               _cb_mbox_put_msg, &connection_timeout_arg);
+                _setup_timeout(&connection_timeout, \
+                    CONFIG_GNRC_TCP_CONNECTION_TIMEOUT_DURATION, \
+                    _cb_mbox_put_msg, &connection_timeout_arg);
 
                 /* If the window re-opened and we are probing: Stop it */
                 if (tcb->snd_wnd > 0 && probing_mode) {
@@ -633,8 +637,9 @@ ssize_t gnrc_tcp_recv(gnrc_tcp_tcb_t *tcb, void *data, const size_t max_len,
     }
 
     /* Setup connection timeout: Put timeout message in tcb's mbox on expiration */
-    _setup_timeout(&connection_timeout, GNRC_TCP_CONNECTION_TIMEOUT_DURATION,
-                   _cb_mbox_put_msg, &connection_timeout_arg);
+    _setup_timeout(&connection_timeout, \
+        CONFIG_GNRC_TCP_CONNECTION_TIMEOUT_DURATION, \
+        _cb_mbox_put_msg, &connection_timeout_arg);
 
     /* Setup user specified timeout */
     _setup_timeout(&user_timeout, timeout_duration_us, _cb_mbox_put_msg, &user_timeout_arg);
@@ -714,8 +719,9 @@ void gnrc_tcp_close(gnrc_tcp_tcb_t *tcb)
     }
 
     /* Setup connection timeout: Put timeout message in tcb's mbox on expiration */
-    _setup_timeout(&connection_timeout, GNRC_TCP_CONNECTION_TIMEOUT_DURATION,
-                   _cb_mbox_put_msg, &connection_timeout_arg);
+    _setup_timeout(&connection_timeout, \
+        CONFIG_GNRC_TCP_CONNECTION_TIMEOUT_DURATION, \
+        _cb_mbox_put_msg, &connection_timeout_arg);
 
     /* Start connection teardown sequence */
     _fsm(tcb, FSM_EVENT_CALL_CLOSE, NULL, NULL, 0);
