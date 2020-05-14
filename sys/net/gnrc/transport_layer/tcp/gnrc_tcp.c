@@ -556,8 +556,10 @@ ssize_t gnrc_tcp_send(gnrc_tcp_tcb_t *tcb, const void *data, const size_t len,
                     probe_timeout_duration_us = \
                         CONFIG_GNRC_TCP_PROBE_LOWER_BOUND;
                 }
-                else if (probe_timeout_duration_us > GNRC_TCP_PROBE_UPPER_BOUND) {
-                    probe_timeout_duration_us = GNRC_TCP_PROBE_UPPER_BOUND;
+                else if (probe_timeout_duration_us > \
+                    CONFIG_GNRC_TCP_PROBE_UPPER_BOUND) {
+                    probe_timeout_duration_us = \
+                        CONFIG_GNRC_TCP_PROBE_UPPER_BOUND;
                 }
                 break;
 
