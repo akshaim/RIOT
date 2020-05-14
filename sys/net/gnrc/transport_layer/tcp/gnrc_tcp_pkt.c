@@ -389,7 +389,7 @@ int _pkt_setup_retransmit(gnrc_tcp_tcb_t *tcb, gnrc_pktsnip_t *pkt, const bool r
         }
         else {
             tcb->rto = tcb->srtt + _max(CONFIG_GNRC_TCP_RTO_GRANULARITY, \
-                GNRC_TCP_RTO_K * tcb->rtt_var);
+                CONFIG_GNRC_TCP_RTO_K * tcb->rtt_var);
         }
     }
     else {
