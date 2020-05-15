@@ -29,6 +29,11 @@ extern "C" {
 #endif
 
 /**
+ * @defgroup net_gnrc_mac_conf    GNRC MAC compile configurations
+ * @ingroup  net_gnrc_conf
+ * @{
+ */
+/**
  * @brief   The default rx queue size for incoming packets
  */
 #ifndef GNRC_MAC_RX_QUEUE_SIZE
@@ -64,6 +69,7 @@ extern "C" {
 #ifndef GNRC_MAC_ENABLE_DUTYCYCLE_RECORD
 #define GNRC_MAC_ENABLE_DUTYCYCLE_RECORD    (1U)
 #endif
+/** @} */
 
 #ifdef __cplusplus
 }
