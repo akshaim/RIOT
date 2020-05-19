@@ -1171,7 +1171,7 @@ static bool _handle_in_t2u_send_preamble(gnrc_netif_t *netif)
         gnrc_gomach_clear_timeout(netif, GNRC_GOMACH_TIMEOUT_WAIT_RX_END);
 
         gnrc_gomach_set_timeout(netif, GNRC_GOMACH_TIMEOUT_WAIT_RX_END,
-                                GNRC_GOMACH_WAIT_RX_END_US);
+                                CONFIG_GNRC_GOMACH_WAIT_RX_END_US);
         return false;
     }
 
@@ -1554,7 +1554,7 @@ static void _cp_listen_end(gnrc_netif_t *netif)
         netif->mac.prot.gomach.cp_extend_count++;
         gnrc_gomach_clear_timeout(netif, GNRC_GOMACH_TIMEOUT_WAIT_RX_END);
         gnrc_gomach_set_timeout(netif, GNRC_GOMACH_TIMEOUT_WAIT_RX_END,
-                                GNRC_GOMACH_WAIT_RX_END_US);
+                                CONFIG_GNRC_GOMACH_WAIT_RX_END_US);
     }
     else {
         gnrc_gomach_clear_timeout(netif, GNRC_GOMACH_TIMEOUT_WAIT_RX_END);
@@ -1771,7 +1771,7 @@ static void gomach_vtdma(gnrc_netif_t *netif)
         if (gnrc_gomach_get_netdev_state(netif) == NETOPT_STATE_RX) {
             gnrc_gomach_clear_timeout(netif, GNRC_GOMACH_TIMEOUT_WAIT_RX_END);
             gnrc_gomach_set_timeout(netif, GNRC_GOMACH_TIMEOUT_WAIT_RX_END,
-                                    GNRC_GOMACH_WAIT_RX_END_US);
+                                    CONFIG_GNRC_GOMACH_WAIT_RX_END_US);
             return;
         }
 
