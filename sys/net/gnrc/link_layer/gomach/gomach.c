@@ -193,7 +193,8 @@ static void _gomach_rtt_handler(uint32_t event, gnrc_netif_t *netif)
 
             /* Set next cycle's starting time. */
             uint32_t alarm = netif->mac.prot.gomach.last_wakeup +
-                             RTT_US_TO_TICKS(GNRC_GOMACH_SUPERFRAME_DURATION_US);
+                             RTT_US_TO_TICKS \
+                             (CONFIG_GNRC_GOMACH_SUPERFRAME_DURATION_US);
             rtt_set_alarm(alarm, _gomach_rtt_cb, NULL);
 
             /* Update neighbors' public channel phases. */
@@ -241,7 +242,7 @@ static void gomach_bcast_init(gnrc_netif_t *netif)
     }
 
     gnrc_gomach_set_timeout(netif, GNRC_GOMACH_TIMEOUT_BCAST_FINISH,
-                            GNRC_GOMACH_SUPERFRAME_DURATION_US);
+                            CONFIG_GNRC_GOMACH_SUPERFRAME_DURATION_US);
 
     gnrc_priority_pktqueue_flush(&netif->mac.rx.queue);
     netif->mac.tx.bcast_state = GNRC_GOMACH_BCAST_SEND;
@@ -402,7 +403,8 @@ static void gomach_init_prepare(gnrc_netif_t *netif)
     rtt_clear_alarm();
 
     /* Random delay for avoiding the same wake-up phase among devices. */
-    uint32_t random_backoff = random_uint32_range(0, GNRC_GOMACH_SUPERFRAME_DURATION_US);
+    uint32_t random_backoff = random_uint32_range(0, \
+    CONFIG_GNRC_GOMACH_SUPERFRAME_DURATION_US);
     xtimer_usleep(random_backoff);
 
     gnrc_gomach_set_quit_cycle(netif, false);
@@ -463,7 +465,7 @@ static void gomach_t2k_init(gnrc_netif_t *netif)
                                    gnrc_gomach_phase_now(netif);
 
     if (wait_phase_duration < 0) {
-        wait_phase_duration += GNRC_GOMACH_SUPERFRAME_DURATION_US;
+        wait_phase_duration += CONFIG_GNRC_GOMACH_SUPERFRAME_DURATION_US;
     }
 
     /* Upon several times of t2k failure, we now doubt that the phase-lock may fail due to drift.
@@ -474,7 +476,7 @@ static void gomach_t2k_init(gnrc_netif_t *netif)
     if (netif->mac.tx.no_ack_counter == (GNRC_GOMACH_REPHASELOCK_THRESHOLD - 2)) {
         if ((uint32_t)wait_phase_duration < CONFIG_GNRC_GOMACH_CP_DURATION_US) {
             wait_phase_duration = (wait_phase_duration + \
-            GNRC_GOMACH_SUPERFRAME_DURATION_US) - \
+            CONFIG_GNRC_GOMACH_SUPERFRAME_DURATION_US) - \
                                  CONFIG_GNRC_GOMACH_CP_DURATION_US;
         }
         else {
@@ -487,13 +489,17 @@ static void gomach_t2k_init(gnrc_netif_t *netif)
     if (netif->mac.tx.no_ack_counter == (GNRC_GOMACH_REPHASELOCK_THRESHOLD - 1)) {
         wait_phase_duration = wait_phase_duration + \
         CONFIG_GNRC_GOMACH_CP_DURATION_US;
-        if ((uint32_t)wait_phase_duration > GNRC_GOMACH_SUPERFRAME_DURATION_US) {
-            wait_phase_duration = wait_phase_duration - GNRC_GOMACH_SUPERFRAME_DURATION_US;
+        if ((uint32_t)wait_phase_duration > \
+        CONFIG_GNRC_GOMACH_SUPERFRAME_DURATION_US) {
+            wait_phase_duration = wait_phase_duration - \
+            CONFIG_GNRC_GOMACH_SUPERFRAME_DURATION_US;
         }
     }
 
-    if ((uint32_t)wait_phase_duration > GNRC_GOMACH_SUPERFRAME_DURATION_US) {
-        wait_phase_duration = wait_phase_duration % GNRC_GOMACH_SUPERFRAME_DURATION_US;
+    if ((uint32_t)wait_phase_duration > \
+    CONFIG_GNRC_GOMACH_SUPERFRAME_DURATION_US) {
+        wait_phase_duration = wait_phase_duration % \
+        CONFIG_GNRC_GOMACH_SUPERFRAME_DURATION_US;
     }
     gnrc_gomach_set_timeout(netif, GNRC_GOMACH_TIMEOUT_WAIT_CP, (uint32_t)wait_phase_duration);
 
@@ -583,7 +589,7 @@ static void _cp_tx_success(gnrc_netif_t *netif)
         }
         else {
             netif->mac.tx.current_neighbor->cp_phase +=
-                GNRC_GOMACH_SUPERFRAME_DURATION_US;
+                CONFIG_GNRC_GOMACH_SUPERFRAME_DURATION_US;
             netif->mac.tx.current_neighbor->cp_phase -=
                 CONFIG_GNRC_GOMACH_CP_DURATION_US;
         }
@@ -596,9 +602,9 @@ static void _cp_tx_success(gnrc_netif_t *netif)
             (CONFIG_GNRC_GOMACH_CP_DURATION_US + 20 * US_PER_MS);
 
         if (netif->mac.tx.current_neighbor->cp_phase >=
-            GNRC_GOMACH_SUPERFRAME_DURATION_US) {
+            CONFIG_GNRC_GOMACH_SUPERFRAME_DURATION_US) {
             netif->mac.tx.current_neighbor->cp_phase -=
-                GNRC_GOMACH_SUPERFRAME_DURATION_US;
+                CONFIG_GNRC_GOMACH_SUPERFRAME_DURATION_US;
         }
     }
 
@@ -1452,7 +1458,7 @@ static void _gomach_phase_backoff(gnrc_netif_t *netif)
     netif->mac.prot.gomach.last_wakeup = rtt_get_counter();
 
     uint32_t alarm = netif->mac.prot.gomach.last_wakeup +
-                     RTT_US_TO_TICKS(GNRC_GOMACH_SUPERFRAME_DURATION_US);
+                     RTT_US_TO_TICKS(CONFIG_GNRC_GOMACH_SUPERFRAME_DURATION_US);
 
     rtt_set_alarm(alarm, _gomach_rtt_cb, NULL);
 
