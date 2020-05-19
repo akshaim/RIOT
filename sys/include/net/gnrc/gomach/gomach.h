@@ -338,8 +338,8 @@ extern "C" {
  * This macrodefines the maximum t2u attempts before dropping the data packet
  * in GoMacH.
  */
-#ifndef GNRC_GOMACH_T2U_RETYR_THRESHOLD
-#define GNRC_GOMACH_T2U_RETYR_THRESHOLD      (2U)
+#ifndef CONFIG_GNRC_GOMACH_T2U_RETYR_THRESHOLD
+#define CONFIG_GNRC_GOMACH_T2U_RETYR_THRESHOLD      (2U)
 #endif
 
 /**
