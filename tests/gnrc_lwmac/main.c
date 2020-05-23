@@ -32,9 +32,23 @@
 
 #include "net/gnrc/pktdump.h"
 #include "net/gnrc.h"
+#include "net/gnrc/lwmac/lwmac.h"
+#include "net/gnrc/lwmac/types.h"
+
+#define STR(x)   #x
+#define SHOW_DEFINE(x) printf("%s=%s\n", #x, STR(x))
 
 int main(void)
 {
+    SHOW_DEFINE(CONFIG_GNRC_LWMAC_WAKEUP_INTERVAL_US);
+    SHOW_DEFINE(CONFIG_GNRC_LWMAC_TIME_BETWEEN_WR_US);
+    SHOW_DEFINE(CONFIG_GNRC_LWMAC_WR_PREPARATION_US);
+    SHOW_DEFINE(CONFIG_GNRC_LWMAC_DATA_DELAY_US);
+    SHOW_DEFINE(CONFIG_GNRC_LWMAC_DATA_CSMA_RETRIES);
+    SHOW_DEFINE(CONFIG_GNRC_LWMAC_MAX_DATA_TX_RETRIES);
+    SHOW_DEFINE(CONFIG_GNRC_LWMAC_MAX_RX_EXTENSION_NUM);
+    SHOW_DEFINE(CONFIG_GNRC_LWMAC_BROADCAST_CSMA_RETRIES);
+    SHOW_DEFINE(CONFIG_GNRC_LWMAC_TIMEOUT_COUNT);
     puts("LWMAC test application");
 
     gnrc_netreg_entry_t dump = GNRC_NETREG_ENTRY_INIT_PID(GNRC_NETREG_DEMUX_CTX_ALL,
