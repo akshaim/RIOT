@@ -13,6 +13,8 @@
 #include "msg.h"
 #include "net/af.h"
 #include "net/gnrc/tcp.h"
+#include "net/gnrc/tcp/config.h"
+
 
 #define MAIN_QUEUE_SIZE (8)
 #define BUFFER_SIZE (2049)
@@ -20,6 +22,9 @@
 static msg_t main_msg_queue[MAIN_QUEUE_SIZE];
 static gnrc_tcp_tcb_t tcb;
 static char buffer[BUFFER_SIZE];
+
+#define STR(x)   #x
+#define SHOW_DEFINE(x) printf("%s=%s\n", #x, STR(x))
 
 void dump_args(int argc, char **argv)
 {
@@ -318,6 +323,18 @@ static const shell_command_t shell_commands[] = {
 
 int main(void)
 {
+    SHOW_DEFINE(CONFIG_GNRC_TCP_CONNECTION_TIMEOUT_DURATION);
+    SHOW_DEFINE(CONFIG_GNRC_TCP_MSL);
+    SHOW_DEFINE(CONFIG_GNRC_TCP_MSS_MULTIPLICATOR);
+    SHOW_DEFINE(CONFIG_GNRC_TCP_RCV_BUFFERS);
+    SHOW_DEFINE(CONFIG_GNRC_TCP_RTO_LOWER_BOUND);
+    SHOW_DEFINE(CONFIG_GNRC_TCP_RTO_UPPER_BOUND);
+    SHOW_DEFINE(CONFIG_GNRC_TCP_RTO_GRANULARITY);
+    SHOW_DEFINE(CONFIG_GNRC_TCP_RTO_A_DIV);
+    SHOW_DEFINE(CONFIG_GNRC_TCP_RTO_B_DIV);
+    SHOW_DEFINE(CONFIG_GNRC_TCP_RTO_K);
+    SHOW_DEFINE(CONFIG_GNRC_TCP_PROBE_LOWER_BOUND);
+    SHOW_DEFINE(CONFIG_GNRC_TCP_PROBE_UPPER_BOUND);
     /* we need a message queue for the thread running the shell in order to
      * receive potentially fast incoming networking packets */
     msg_init_queue(main_msg_queue, MAIN_QUEUE_SIZE);
