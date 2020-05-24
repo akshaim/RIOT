@@ -63,18 +63,10 @@ extern "C" {
 #endif
 
 /**
- * @brief   The default buffer size for storing dispatching packets
+ * @brief   Count of neighbor nodes in one-hop distance.
  */
-#ifndef GNRC_MAC_DISPATCH_BUFFER_SIZE
-#define GNRC_MAC_DISPATCH_BUFFER_SIZE \
-    (1 << CONFIG_GNRC_MAC_DISPATCH_BUFFER_SIZE_EXP)
-#endif
-
-/**
- * @brief   Count of neighbor nodes in one-hop distance
- */
-#ifndef GNRC_MAC_NEIGHBOR_COUNT
-#define GNRC_MAC_NEIGHBOR_COUNT            (8U)
+#ifndef CONFIG_GNRC_MAC_NEIGHBOR_COUNT
+#define CONFIG_GNRC_MAC_NEIGHBOR_COUNT      (8U)
 #endif
 
 /**
