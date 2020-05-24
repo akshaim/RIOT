@@ -19,6 +19,10 @@
 
 #include <stdio.h>
 #include "test_utils/interactive_sync.h"
+#include "net/gnrc/mac/mac.h"
+
+#define STR(x)   #x
+#define SHOW_DEFINE(x) printf("%s=%s\n", #x, STR(x))
 
 #if defined(__AVR__)
 #include <avr/pgmspace.h>
@@ -40,6 +44,16 @@ void test_utils_interactive_sync(void)
             PUTS("READY");
         }
         else if (c != '\n' && c != '\r') {
+            SHOW_DEFINE(CONFIG_GNRC_MAC_RX_QUEUE_SIZE_EXP);
+            SHOW_DEFINE(GNRC_MAC_RX_QUEUE_SIZE);
+            SHOW_DEFINE(CONFIG_GNRC_MAC_DISPATCH_BUFFER_SIZE_EXP);
+            SHOW_DEFINE(GNRC_MAC_DISPATCH_BUFFER_SIZE);
+            SHOW_DEFINE(CONFIG_GNRC_MAC_NEIGHBOR_COUNT_EXP);
+            SHOW_DEFINE(GNRC_MAC_NEIGHBOR_COUNT);
+            SHOW_DEFINE(CONFIG_GNRC_MAC_TX_QUEUE_SIZE_EXP);
+            SHOW_DEFINE(GNRC_MAC_TX_QUEUE_SIZE);
+            SHOW_DEFINE(CONFIG_GNRC_MAC_DISABLE_DUTYCYCLE_RECORD);
+            SHOW_DEFINE(GNRC_MAC_ENABLE_DUTYCYCLE_RECORD);
             PUTS("Help: Press s to start test, r to print it is ready");
         }
         c = getchar();
