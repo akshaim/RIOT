@@ -104,7 +104,7 @@ static const spi_dev_t spi_config[] = {
         .clk_pin = GPIO_PIN(PE, 12),
         .loc = USART_ROUTE_LOCATION_LOC0,
         .cmu = cmuClock_USART0,
-        .irq = USART0_IRQn
+        .irq = USART0_RX_IRQn
     }
 };
 
