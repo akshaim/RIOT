@@ -145,7 +145,7 @@ static const uart_conf_t uart_config[] = {
         .rx_pin = GPIO_PIN(PA, 0),
         .tx_pin = GPIO_PIN(PF, 2),
         .loc = USART_ROUTE_LOCATION_LOC4,
-        .cmu = cmuClock_USART0,
+        .cmu = cmuClock_USART1,
         .irq = USART1_RX_IRQn
     },
     {
