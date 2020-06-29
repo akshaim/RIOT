@@ -141,10 +141,10 @@ static const timer_conf_t timer_config[] = {
  */
 static const uart_conf_t uart_config[] = {
     {
-        .dev = USART0,
-        .rx_pin = GPIO_PIN(PE, 11),
-        .tx_pin = GPIO_PIN(PE, 10),
-        .loc = USART_ROUTE_LOCATION_LOC0,
+        .dev = USART1,
+        .rx_pin = GPIO_PIN(PA, 0),
+        .tx_pin = GPIO_PIN(PF, 2),
+        .loc = USART_ROUTE_LOCATION_LOC4,
         .cmu = cmuClock_USART0,
         .irq = USART0_RX_IRQn
     },
