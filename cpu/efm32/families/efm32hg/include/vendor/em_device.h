@@ -38,6 +38,11 @@
  *
  ******************************************************************************/
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
 #ifndef EM_DEVICE_H
 #define EM_DEVICE_H
 
@@ -105,3 +110,7 @@
 #error "em_device.h: PART NUMBER undefined"
 #endif
 #endif /* EM_DEVICE_H */
+#ifdef __cplusplus
+}
+#endif
+

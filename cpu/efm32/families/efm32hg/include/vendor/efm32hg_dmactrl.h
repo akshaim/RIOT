@@ -28,6 +28,11 @@
  *
  ******************************************************************************/
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
 #if defined(__ICCARM__)
 #pragma system_include       /* Treat file as system include file. */
 #elif defined(__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050)
@@ -142,3 +147,7 @@
 
 /** @} End of group EFM32HG_DMA */
 /** @} End of group Parts */
+#ifdef __cplusplus
+}
+#endif
+
