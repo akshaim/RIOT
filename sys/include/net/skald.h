@@ -55,14 +55,21 @@ extern "C" {
 #endif
 
 /**
- * @brief   Default static advertising interval
+ * @defgroup net_skald_conf Skald compile configurations
+ * @ingroup config
+ * @{
+ */
+/**
+ * @brief   Advertising interval in microseconds
  */
 #ifndef CONFIG_SKALD_INTERVAL
 #define CONFIG_SKALD_INTERVAL          (1 * US_PER_SEC)
 #endif
 
 /**
- * @brief   Configure advertising channels
+ * @brief   Configure advertising channel 37
+ *
+ * Set CONFIG_ADV_CH_37_DISABLE to disable channel 37
  */
 #ifndef CONFIG_ADV_CH_37_DISABLE
 #define ADV_CH_37 37,
@@ -70,17 +77,28 @@ extern "C" {
 #define ADV_CH_37
 #endif
 
+/**
+ * @brief   Configure advertising channel 38
+ *
+ * Set CONFIG_ADV_CH_38_DISABLE to disable channel 38
+ */
 #ifndef CONFIG_ADV_CH_38_DISABLE
 #define ADV_CH_38 38,
 #else
 #define ADV_CH_38
 #endif
 
+/**
+ * @brief   Configure advertising channel 39
+ *
+ * Set CONFIG_ADV_CH_39_DISABLE to disable channel 39
+ */
 #ifndef CONFIG_ADV_CH_39_DISABLE
 #define ADV_CH_39 39
 #else
 #define ADV_CH_39
 #endif
+/** @} */
 
 /**
  * @brief   List of advertising channels
