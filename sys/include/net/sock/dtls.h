@@ -491,9 +491,14 @@
 extern "C" {
 #endif
 
+#ifndef CONFIG_DTLS_HANDSHAKE_BUFSIZE_EXP
+#define CONFIG_DTLS_HANDSHAKE_BUFSIZE_EXP  8
+#endif
+
 #ifndef DTLS_HANDSHAKE_BUFSIZE
-#define DTLS_HANDSHAKE_BUFSIZE  (256)   /**< Size buffer used in handshake to
-                                             hold credentials */
+#define DTLS_HANDSHAKE_BUFSIZE  (1 << CONFIG_DTLS_HANDSHAKE_BUFSIZE_EXP)
+                                       /**< Size buffer used in handshake to
+                                            hold credentials */
 #endif
 
 #define SOCK_DTLS_HANDSHAKE     (EXDEV) /**< Return value for a successful
