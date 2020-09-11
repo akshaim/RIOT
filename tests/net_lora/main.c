@@ -1,0 +1,29 @@
+/*
+ * Copyright (c) 2020 Freie Universitaet Berlin
+ *
+ * This file is subject to the terms and conditions of the GNU Lesser
+ * General Public License v2.1. See the file LICENSE in the top level
+ * directory for more details.
+ */
+
+#include <stdio.h>
+#include "net/lora.h"
+
+#define STR(x)   #x
+#define SHOW_DEFINE(x) printf("%s=%s\n", #x, STR(x))
+
+int main(void)
+{
+    SHOW_DEFINE(CONFIG_LORA_PREAMBLE_LENGTH_DEFAULT);
+    SHOW_DEFINE(CONFIG_LORA_SYMBOL_TIMEOUT_DEFAULT);
+    SHOW_DEFINE(CONFIG_LORA_BW_DEFAULT);
+    SHOW_DEFINE(CONFIG_LORA_SF_DEFAULT);
+    SHOW_DEFINE(CONFIG_LORA_CR_DEFAULT);
+    SHOW_DEFINE(CONFIG_LORA_IQ_INVERTED_DEFAULT);
+    SHOW_DEFINE(CONFIG_LORA_FREQUENCY_HOPPING_DEFAULT);
+    SHOW_DEFINE(CONFIG_LORA_FREQUENCY_HOPPING_PERIOD_DEFAULT);
+    SHOW_DEFINE(CONFIG_LORA_FIXED_HEADER_LEN_MODE_DEFAULT);
+    SHOW_DEFINE(CONFIG_LORA_PAYLOAD_CRC_OFF_DEFAULT);
+    SHOW_DEFINE(LORA_PAYLOAD_CRC_ON_DEFAULT);
+    SHOW_DEFINE(CONFIG_LORA_PAYLOAD_LENGTH_DEFAULT);
+}
