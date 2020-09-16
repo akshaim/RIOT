@@ -23,10 +23,10 @@ Set the Application Key, Device EUI and Application EUI using ifconfig. Assuming
 the interface pid is 3:
 
 ```
-ifconfig 3 set deveui AAAAAAAAAAAAAAAA
-ifconfig 3 set appeui BBBBBBBBBBBBBBBB
-ifconfig 3 set appkey CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-ifconfig 3 up
+ifconfig 4 set deveui 00E9235D36C70300
+ifconfig 4 set appeui 0000000000000000
+ifconfig 4 set appkey E094F562F416DE1D532AA2926A76F025
+ifconfig 4 up
 ```
 
 Wait for 5-6 seconds. Type `ifconfig`. The link status should be `up`:
@@ -45,11 +45,11 @@ Iface  3  HWaddr: 26:01:27:2F  Frequency: 868500000Hz  BW: 125kHz  SF: 7
 Deactivate OTAA using ifconfig and set the AppSKey, NwkSKey and DevAddr;
 
 ```
-ifconfig 3 -otaa
-ifconfig 3 set appskey DDDDDDDDDDDDDDDD
-ifconfig 3 set nwkskey EEEEEEEEEEEEEEEE
-ifconfig 3 set addr FFFFFFFF
-ifconfig 3 up
+ifconfig 4 -otaa
+ifconfig 4 set appskey 74CDA5C1D0DA84E7AF5087D65DF92673
+ifconfig 4 set nwkskey 0C8774CB34A0A6A9850866F35CA1F98A
+ifconfig 4 set addr 26011328
+ifconfig 4 up
 ```
 
 The join by ABP occurs immediately.
@@ -73,7 +73,7 @@ CFLAGS += -DLORAMAC_DEV_ADDR_DEFAULT=\{0xFF\,0xFF\,0xFF\,0xFF\}
 After join, send data using `send` command. E.g to send "Hello RIOT!" to port 2:
 
 ```
-send 3 "Hello RIOT!" 2
+send 4 "Hello RIOT!" 2
 ```
 
 ## Changing datarate of transmission
