@@ -23,10 +23,17 @@ Set the Application Key, Device EUI and Application EUI using ifconfig. Assuming
 the interface pid is 3:
 
 ```
-ifconfig 4 set deveui 00E9235D36C70300
+ifconfig 4 set deveui 00E9215D36C70300
+ifconfig 4 set appeui 0000000000000000
+ifconfig 4 set appeui 70B3D57ED000B99C
+ifconfig 4 set appkey E094F362F416DE1D532AA2926A76F025
+ifconfig 4 up
+
+India
+ifconfig 4 set deveui 00E9215D36C70200
 ifconfig 4 set appeui 0000000000000000
 ifconfig 4 set appkey E094F562F416DE1D532AA2926A76F025
-ifconfig 4 up
+
 ```
 
 Wait for 5-6 seconds. Type `ifconfig`. The link status should be `up`:
@@ -48,7 +55,7 @@ Deactivate OTAA using ifconfig and set the AppSKey, NwkSKey and DevAddr;
 ifconfig 4 -otaa
 ifconfig 4 set appskey 74CDA5C1D0DA84E7AF5087D65DF92673
 ifconfig 4 set nwkskey 0C8774CB34A0A6A9850866F35CA1F98A
-ifconfig 4 set addr 26011328
+ifconfig 4 set addr 26011321
 ifconfig 4 up
 ```
 
@@ -89,7 +96,7 @@ ifconfig 3 set dr 2
 Use `ifconfig` to request a Link Check on the next transmission:
 
 ```
-ifconfig 3 link_check
+ifconfig 4 link_check
 ```
 
 Send some data. The result of the Link Check request can be seen with
@@ -120,14 +127,14 @@ confirmable.
 E.g send confirmable messages:
 
 ```
-ifconfig 3 ack_req
+ifconfig 4 ack_req
 send 3 "My confirmable message"
 ```
 
 And unconfirmable messages:
 
 ```
-ifconfig 3 -ack_req
+ifconfig 4 -ack_req
 send 3 "My unconfirmable message"
 ```
 
