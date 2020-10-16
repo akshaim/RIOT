@@ -102,6 +102,17 @@ extern "C" {
 #define EMCUTE_DEFAULT_PORT     (1883U)
 #endif
 
+/**
+ * @brief   Default buffer size for the EMCUTE (as exponent of 2^n).
+ *
+ *          As the buffer size ALWAYS needs to be power of two, this option
+ *          represents the exponent of 2^n, which will be used as the size of
+ *          the buffer.
+ */
+#ifndef CONFIG_EMCUTE_BUFSIZE_EXP
+#define CONFIG_EMCUTE_BUFSIZE_EXP           (9U)
+#endif
+
 #ifndef EMCUTE_BUFSIZE
 /**
  * @brief   Buffer size used for emCute's transmit and receive buffers
@@ -111,7 +122,7 @@ extern "C" {
  *
  * The overall buffer size used by emCute is this value time two (Rx + Tx).
  */
-#define EMCUTE_BUFSIZE          (512U)
+#define EMCUTE_BUFSIZE                      (1 << CONFIG_EMCUTE_BUFSIZE_EXP)
 #endif
 
 #ifndef EMCUTE_TOPIC_MAXLEN
