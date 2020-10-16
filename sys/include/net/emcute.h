@@ -125,14 +125,14 @@ extern "C" {
 #define EMCUTE_BUFSIZE                      (1 << CONFIG_EMCUTE_BUFSIZE_EXP)
 #endif
 
-#ifndef EMCUTE_TOPIC_MAXLEN
+#ifndef CONFIG_EMCUTE_TOPIC_MAXLEN
 /**
  * @brief   Maximum topic length
  *
  * @note    **Must** be less than (256 - 6) AND less than
  *          (@ref EMCUTE_BUFSIZE - 6).
  */
-#define EMCUTE_TOPIC_MAXLEN     (196U)
+#define CONFIG_EMCUTE_TOPIC_MAXLEN          (196U)
 #endif
 
 #ifndef EMCUTE_KEEPALIVE
@@ -270,7 +270,7 @@ int emcute_discon(void);
  * @return  EMCUTE_OK on success
  * @return  EMCUTE_NOGW if not connected to a gateway
  * @return  EMCUTE_OVERFLOW if length of topic name exceeds
- *          @ref EMCUTE_TOPIC_MAXLEN
+ *          @ref CONFIG_EMCUTE_TOPIC_MAXLEN
  * @return  EMCUTE_TIMEOUT on connection timeout
  */
 int emcute_reg(emcute_topic_t *topic);
@@ -308,7 +308,7 @@ int emcute_pub(emcute_topic_t *topic, const void *buf, size_t len,
  * @return  EMCUTE_OK on success
  * @return  EMCUTE_NOGW if not connected to a gateway
  * @return  EMCUTE_OVERFLOW if length of topic name exceeds
- *          @ref EMCUTE_TOPIC_MAXLEN
+ *          @ref CONFIG_EMCUTE_TOPIC_MAXLEN
  * @return  EMCUTE_TIMEOUT on connection timeout
  */
 int emcute_sub(emcute_sub_t *sub, unsigned flags);
@@ -333,7 +333,7 @@ int emcute_unsub(emcute_sub_t *sub);
  * @return  EMCUTE_OK on success
  * @return  EMCUTE_NOGW if not connected to a gateway
  * @return  EMCUTE_OVERFLOW if length of topic name exceeds
- *          @ref EMCUTE_TOPIC_MAXLEN
+ *          @ref CONFIG_EMCUTE_TOPIC_MAXLEN
  * @return  EMCUTE_REJECT on rejection by the gateway
  * @return  EMCUTE_TIMEOUT on response timeout
  */
