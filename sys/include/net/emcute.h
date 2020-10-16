@@ -134,7 +134,7 @@ extern "C" {
 #define CONFIG_EMCUTE_TOPIC_MAXLEN          (196U)
 #endif
 
-#ifndef EMCUTE_KEEPALIVE
+#ifndef CONFIG_EMCUTE_KEEPALIVE
 /**
  * @brief   Keep-alive interval [in s]
  *
@@ -143,7 +143,7 @@ extern "C" {
  *
  * For the default value, see spec v1.2, section 7.2 -> T_WAIT: > 5 min
  */
-#define EMCUTE_KEEPALIVE        (360)       /* -> 6 min*/
+#define CONFIG_EMCUTE_KEEPALIVE             (360)       /* -> 6 min*/
 #endif
 
 #ifndef EMCUTE_T_RETRY
