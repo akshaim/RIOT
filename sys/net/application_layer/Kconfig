@@ -16,3 +16,4 @@ endmenu # CoAP
 
 rsource "cord/Kconfig"
 rsource "dhcpv6/Kconfig"
+rsource "emcute/Kconfig"
