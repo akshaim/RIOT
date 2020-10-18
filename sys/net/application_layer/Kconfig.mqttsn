@@ -1,0 +1,25 @@
+# Copyright (c) 2020 Freie Universitaet Berlin
+#
+# This file is subject to the terms and conditions of the GNU Lesser
+# General Public License v2.1. See the file LICENSE in the top level
+# directory for more details.
+#
+
+menuconfig KCONFIG_MQTTSN
+    bool "Configure MQTT-SN generic options"
+    depends on USEMODULE_EMCUTE || USEMODULE_ASYMCUTE
+    help
+        Configure MQTT-SN generic configurations for client.
+
+if KCONFIG_MQTTSN
+
+config MQTTSN_DEFAULT_PORT
+    int "Default UDP port for MQTT-SN client"
+    range 0 65535
+    default 1883
+    help
+        Configure the default UDP port for MQTT-SN client. This will write to 
+        the macro 'CONFIG_MQTTSN_DEFAULT_PORT'. Usage can be found in the
+        example implementation of Asymcute and Emcute. 
+
+endif # KCONFIG_MQTTSN
