@@ -60,7 +60,12 @@ extern "C" {
 
 /**
  * @defgroup net_asymcute_conf Asymcute (MQTT-SN Client) compile configurations
- * @ingroup config
+ * @ingroup net_mqtt_conf
+ * @brief   Compile-time configuration options for Asymcute, an asynchronous
+ *          MQTT-SN implementation based on the OASIS MQTT-SN protocol. It
+ *          provides a flexible interface that allows users to issue any number
+ *          of concurrent requests to one or more different gateways
+ *          simultaneously.
  * @{
  */
 /**
