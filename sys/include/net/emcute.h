@@ -95,13 +95,6 @@
 extern "C" {
 #endif
 
-#ifndef EMCUTE_DEFAULT_PORT
-/**
- * @brief   Default UDP port to listen on (also used as SRC port)
- */
-#define EMCUTE_DEFAULT_PORT     (1883U)
-#endif
-
 /**
  * @brief   Default buffer size for the EMCUTE (as exponent of 2^n).
  *
