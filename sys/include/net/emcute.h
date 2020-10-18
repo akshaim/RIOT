@@ -95,10 +95,20 @@
 extern "C" {
 #endif
 
-#ifndef CONFIG_EMCUTE_DEFAULT_PORT
+/**
+ * @defgroup net_emcute_conf EmCute (MQTT-SN Client) compile configurations
+ * @ingroup net_mqtt_conf
+ * @brief   Compile-time configuration options for emCute, an implementation
+ *          of the OASIS MQTT-SN protocol for RIOT. It is designed with a focus
+ *          on small memory footprint and usability
+ * @{
+ */
 /**
  * @brief   Default UDP port to listen on (also used as SRC port)
+ *
+ * Usage can be found in examples/emcute_mqttsn.
  */
+#ifndef CONFIG_EMCUTE_DEFAULT_PORT
 #define CONFIG_EMCUTE_DEFAULT_PORT          (1883U)
 #endif
 
@@ -112,7 +122,54 @@ extern "C" {
 #define CONFIG_EMCUTE_BUFSIZE_EXP           (9U)
 #endif
 
-#ifndef EMCUTE_BUFSIZE
+/**
+ * @brief   Maximum topic length
+ *
+ * @note    **Must** be less than (256 - 6) AND less than ( @ref EMCUTE_BUFSIZE - 6 )
+ */
+#ifndef CONFIG_EMCUTE_TOPIC_MAXLEN
+#define CONFIG_EMCUTE_TOPIC_MAXLEN          (196U)
+#endif
+
+/**
+ * @brief   Keep-alive interval [in seconds] communicated to the gateway
+ *
+ * Keep alive interval in seconds which is communicated to the gateway in the
+ * CONNECT message. For more information, see MQTT-SN Spec v1.2, section 5.4.4.
+ * For default values, see section 7.2 -> TWAIT: > 5 min.
+ */
+#ifndef CONFIG_EMCUTE_KEEPALIVE
+#define CONFIG_EMCUTE_KEEPALIVE             (360)       /* -> 6 min*/
+#endif
+
+/**
+ * @brief   Re-send interval [in seconds]
+ *
+ * Interval used for timing the retry messages which are sent when the expected
+ * reply from GW is not received. The retry timer is started by the client when
+ * the message is sent and stopped when the expected reply from GW is received.
+ * If the timer times out and the expected GW’s reply is not received, the
+ * client retransmits the message. For more information, see MQTT-SN Spec v1.2,
+ * section 6.13. For default values, see section 7.2 -> Tretry: 10 to 15 sec.
+ */
+#ifndef CONFIG_EMCUTE_T_RETRY
+#define CONFIG_EMCUTE_T_RETRY               (15U)       /* -> 15 sec */
+#endif
+
+/**
+ * @brief   Number of retransmissions until requests time out
+ *
+ * Maximum number of retransmissions in the event that the retry timer times
+ * out. After 'CONFIG_EMCUTE_N_RETRY' number of retransmissions, the client
+ * aborts the procedure and assumes that its MQTT-SN connection to the gateway
+ * is disconnected. For more information, see MQTT-SN Spec v1.2, section 6.13.
+ * For default values, see section 7.2 -> Nretry: 3-5.
+ */
+#ifndef CONFIG_EMCUTE_N_RETRY
+#define CONFIG_EMCUTE_N_RETRY               (3U)
+#endif
+/** @} */
+
 /**
  * @brief   Buffer size used for emCute's transmit and receive buffers
  *
@@ -121,47 +178,8 @@ extern "C" {
  *
  * The overall buffer size used by emCute is this value time two (Rx + Tx).
  */
+#ifndef EMCUTE_BUFSIZE
 #define EMCUTE_BUFSIZE                      (1 << CONFIG_EMCUTE_BUFSIZE_EXP)
-#endif
-
-#ifndef CONFIG_EMCUTE_TOPIC_MAXLEN
-/**
- * @brief   Maximum topic length
- *
- * @note    **Must** be less than (256 - 6) AND less than
- *          (@ref EMCUTE_BUFSIZE - 6).
- */
-#define CONFIG_EMCUTE_TOPIC_MAXLEN          (196U)
-#endif
-
-#ifndef CONFIG_EMCUTE_KEEPALIVE
-/**
- * @brief   Keep-alive interval [in s]
- *
- * The node will communicate this interval to the gateway send a ping message
- * every time when this amount of time has passed.
- *
- * For the default value, see spec v1.2, section 7.2 -> T_WAIT: > 5 min
- */
-#define CONFIG_EMCUTE_KEEPALIVE             (360)       /* -> 6 min*/
-#endif
-
-#ifndef CONFIG_EMCUTE_T_RETRY
-/**
- * @brief   Re-send interval [in seconds]
- *
- * For the default value, see spec v1.2, section 7.2 -> T_RETRY: 10 to 15 sec
- */
-#define CONFIG_EMCUTE_T_RETRY               (15U)       /* -> 15 sec */
-#endif
-
-#ifndef CONFIG_EMCUTE_N_RETRY
-/**
- * @brief   Number of retries when sending packets
- *
- * For the default value, see spec v1.2, section 7.2 -> N_RETRY: 3-5
- */
-#define CONFIG_EMCUTE_N_RETRY               (3U)
 #endif
 
 /**
