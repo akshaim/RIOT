@@ -26,9 +26,16 @@
 
 #include "riot_logo.h"
 
+#define STR(x)   #x
+#define SHOW_DEFINE(x) printf("%s=%s\n", #x, STR(x))
+
 int main(void)
 {
     ili9341_t dev;
+    SHOW_DEFINE(CONFIG_ILI9341_GVDD);
+    SHOW_DEFINE(CONFIG_ILI9341_VCOMH);
+    SHOW_DEFINE(CONFIG_ILI9341_VCOML);
+    SHOW_DEFINE(CONFIG_ILI9341_LE_MODE);
 
     puts("ili9341 TFT display test application");
 

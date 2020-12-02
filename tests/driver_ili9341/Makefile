@@ -1,4 +1,4 @@
-BOARD ?= stm32f429i-disc1
+BOARD ?= b-l072z-lrwan1
 include ../Makefile.tests_common
 
 USEMODULE += ili9341
