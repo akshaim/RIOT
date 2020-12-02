@@ -23,6 +23,8 @@
 #include "byteorder.h"
 #include "periph/spi.h"
 #include "xtimer.h"
+#include "kernel_defines.h"
+
 #include "ili9341.h"
 #include "ili9341_internal.h"
 
@@ -248,7 +250,7 @@ void ili9341_fill(const ili9341_t *dev, uint16_t x1, uint16_t x2, uint16_t y1,
     _ili9341_set_area(dev, x1, x2, y1, y2);
     /* Memory access command */
     _ili9341_cmd_start(dev, ILI9341_CMD_RAMWR, true);
-#if ILI9341_LE_MODE
+#if IS_ACTIVE(CONFIG_ILI9341_LE_MODE)
     color = htons(color);
 #endif
     for (int i = 0; i < (num_pix - 1); i++) {
@@ -277,7 +279,7 @@ void ili9341_pixmap(const ili9341_t *dev, uint16_t x1, uint16_t x2,
     /* Memory access command */
     _ili9341_cmd_start(dev, ILI9341_CMD_RAMWR, true);
 
-#if ILI9341_LE_MODE
+#if CONFIG_ILI9341_LE_MODE
     for (size_t i = 0; i < num_pix - 1; i++) {
         uint16_t ncolor = htons(*(color + i));
         spi_transfer_bytes(dev->params->spi, dev->params->cs_pin, true,
