@@ -31,6 +31,9 @@
 #include "rn2xx3_params.h"
 #include "rn2xx3_internal.h"
 
+#define STR(x)   #x
+#define SHOW_DEFINE(x) printf("%s=%s\n", #x, STR(x))
+
 static rn2xx3_t rn2xx3_dev;
 static uint8_t payload[RN2XX3_MAX_BUF];
 
@@ -433,6 +436,9 @@ static const shell_command_t shell_commands[] = {
 int main(void)
 {
     puts("RN2XX3 device driver test");
+    
+    SHOW_DEFINE(CONFIG_RN2XX3_DEFAULT_SLEEP);
+    SHOW_DEFINE(CONFIG_RN2XX3_DEFAULT_AR);
 
     rn2xx3_setup(&rn2xx3_dev, &rn2xx3_params[0]);
     if (rn2xx3_init(&rn2xx3_dev) != RN2XX3_OK) {
