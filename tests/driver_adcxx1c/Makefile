@@ -1,5 +1,7 @@
 include ../Makefile.tests_common
 
+BOARD=b-l072z-lrwan1
+
 USEMODULE += adc081c
 USEMODULE += xtimer
 

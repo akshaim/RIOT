@@ -24,6 +24,10 @@
 #include "adcxx1c.h"
 #include "adcxx1c_params.h"
 
+#define STR(x)   #x
+#define SHOW_DEFINE(x) printf("%s=%s\n", #x, STR(x))
+#define SIZE_ARR(x)  (sizeof(x) / sizeof((x)[0]))
+
 #define SLEEP_USEC  (100 * US_PER_MS)
 
 static adcxx1c_t dev;
@@ -37,6 +41,12 @@ static void alert_cb(void *arg)
 int main(void)
 {
     int16_t data;
+
+    SHOW_DEFINE(CONFIG_ADCXX1C_I2C_ADDRESS);
+    SHOW_DEFINE(CONFIG_ADCXX1C_PARAM_CYCLE);
+    SHOW_DEFINE(CONFIG_ADCXX1C_PARAM_LOW_LIMIT);
+    SHOW_DEFINE(CONFIG_ADCXX1C_PARAM_HIGH_LIMIT);
+    SHOW_DEFINE(CONFIG_ADCXX1C_PARAM_HYSTERESIS);
 
     puts("ADCXX1C analog to digital driver test application\n");
     printf("Initializing ADCXX1C analog to digital at I2C_DEV(%i)... ",
