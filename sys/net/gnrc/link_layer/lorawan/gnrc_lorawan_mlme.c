@@ -285,7 +285,7 @@ int _fopts_mlme_link_check_req(lorawan_buffer_t *buf)
     return GNRC_LORAWAN_CID_SIZE;
 }
 
-static void _mlme_link_check_ans(gnrc_lorawan_t *mac, uint8_t *p)
+static void _mlme_link_check_ans(gnrc_lorawan_t *mac, uint8_t *p)  // similar ADR 
 {
     mlme_confirm_t mlme_confirm;
 
@@ -300,7 +300,7 @@ static void _mlme_link_check_ans(gnrc_lorawan_t *mac, uint8_t *p)
 }
 
 void gnrc_lorawan_process_fopts(gnrc_lorawan_t *mac, uint8_t *fopts,
-                                size_t size)
+                                size_t size) // Processing fopts
 {
     if (!fopts || !size) {
         return;
@@ -313,9 +313,10 @@ void gnrc_lorawan_process_fopts(gnrc_lorawan_t *mac, uint8_t *fopts,
     for (uint8_t pos = 0; pos < size; pos += ret) {
         switch (fopts[pos]) {
             case GNRC_LORAWAN_CID_LINK_CHECK_ANS:
-                ret += GNRC_LORAWAN_FOPT_LINK_CHECK_ANS_SIZE;
+                ret += GNRC_LORAWAN_FOPT_LINK_CHECK_ANS_SIZE; // check
                 cb = _mlme_link_check_ans;
                 break;
+            
             default:
                 return;
         }

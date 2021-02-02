@@ -118,7 +118,7 @@ void gnrc_lorawan_mcps_confirm(gnrc_lorawan_t *mac, mcps_confirm_t *confirm)
 
 static void _rx_done(gnrc_lorawan_t *mac)
 {
-    netdev_t *dev = gnrc_lorawan_get_netdev(mac);
+    netdev_t *dev = gnrc_lorawan_get_netdev(mac); //used by most radios
     int bytes_expected = dev->driver->recv(dev, NULL, 0, 0);
     int nread;
     struct netdev_radio_rx_info rx_info;
@@ -129,7 +129,7 @@ static void _rx_done(gnrc_lorawan_t *mac)
         DEBUG("_recv_lorawan: cannot allocate pktsnip.\n");
         /* Discard packet on netdev device */
         dev->driver->recv(dev, NULL, bytes_expected, NULL);
-        gnrc_lorawan_radio_rx_done_cb(mac, NULL, 0);
+        gnrc_lorawan_radio_rx_done_cb(mac, NULL, 0); // received pkt but drop it
         return;
     }
     nread = dev->driver->recv(dev, pkt->data, bytes_expected, &rx_info);
@@ -159,7 +159,7 @@ static void _driver_cb(netdev_t *dev, netdev_event_t event)
     else {
         DEBUG("gnrc_netif: event triggered -> %i\n", event);
         switch (event) {
-            case NETDEV_EVENT_RX_COMPLETE:
+            case NETDEV_EVENT_RX_COMPLETE: // Towards processing foptsn#1
                 _rx_done(mac);
                 break;
             case NETDEV_EVENT_TX_COMPLETE:

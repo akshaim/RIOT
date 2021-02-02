@@ -61,7 +61,7 @@ uint32_t gnrc_lorawan_fcnt_stol(uint32_t fcnt_down, uint16_t s_fcnt)
 }
 
 /**
- * @brief holder of parsed packet
+ * @brief holder of parsed packet // IMPORTTANT
  */
 struct parsed_packet {
     uint32_t fcnt_down;         /**< frame counter */
@@ -151,8 +151,8 @@ void gnrc_lorawan_mcps_process_downlink(gnrc_lorawan_t *mac, uint8_t *psdu,
 
     iolist_t *fopts = NULL;
 
-    if (_pkt.fopts.iol_base) {
-        fopts = &_pkt.fopts;
+    if (_pkt.fopts.iol_base) { // if there are fopts
+        fopts = &_pkt.fopts;  
     }
 
     if (_pkt.enc_payload.iol_base) {
@@ -229,7 +229,7 @@ size_t gnrc_lorawan_build_hdr(uint8_t mtype, le_uint32_t *dev_addr,
 }
 
 size_t gnrc_lorawan_build_uplink(gnrc_lorawan_t *mac, iolist_t *payload,
-                                 int confirmed_data, uint8_t port)
+                                 int confirmed_data, uint8_t port) //importanntt
 {
     lorawan_buffer_t buf = {
         .data = (uint8_t *)mac->mcps.mhdr_mic,
@@ -410,7 +410,7 @@ void gnrc_lorawan_mcps_request(gnrc_lorawan_t *mac,
     int waiting_for_ack = mcps_request->type == MCPS_CONFIRMED;
 
     gnrc_lorawan_build_uplink(mac, pkt, waiting_for_ack,
-                              mcps_request->data.port);
+                              mcps_request->data.port);  // Importttttantttttt
 
     mac->mcps.waiting_for_ack = waiting_for_ack;
     mac->mcps.ack_requested = false;
