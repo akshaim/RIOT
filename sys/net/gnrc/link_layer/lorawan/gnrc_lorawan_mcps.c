@@ -252,7 +252,7 @@ size_t gnrc_lorawan_build_uplink(gnrc_lorawan_t *mac, iolist_t *payload,
 
     buf.index += sizeof(lorawan_hdr_t);
 
-    int fopts_length = gnrc_lorawan_build_options(mac, &buf);
+    int fopts_length = gnrc_lorawan_build_options(mac, &buf); //importanntt
 
     assert(fopts_length < 16);
     lorawan_hdr_set_frame_opts_len(lw_hdr, fopts_length);
