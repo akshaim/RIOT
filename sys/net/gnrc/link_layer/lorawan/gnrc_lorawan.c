@@ -58,6 +58,7 @@ static inline void gnrc_lorawan_mcps_reset(gnrc_lorawan_t *mac)
     mac->mcps.waiting_for_ack = false;
     mac->mcps.fcnt = 0;
     mac->mcps.fcnt_down = 0;
+    mac->mcps.adr_ack_cnt = 0;
 }
 
 void gnrc_lorawan_set_rx2_dr(gnrc_lorawan_t *mac, uint8_t rx2_dr)
