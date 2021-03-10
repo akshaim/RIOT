@@ -26,6 +26,15 @@
 #include "shell.h"
 #include "shell_commands.h"
 
+#include "timex.h"
+#include "fmt.h"
+#include "dht.h"
+#include "dht_params.h"
+
+#define DELAY           (2 * US_PER_SEC)
+#define MODULE_DHT11
+
+
 #include "board.h"
 
 #include "net/gnrc/netapi.h"
@@ -98,6 +107,28 @@ static const shell_command_t shell_commands[] = {
 
 int main(void)
 {
+    dht_t dev;
+
+    puts("LoRaWAN SAUL test application\n");
+
+#ifdef MODULE_DHT11
+    /* initialize first configured sensor */
+    printf("Initializing DHT sensor...\t");
+    if (dht_init(&dev, &dht_params[0]) == DHT_OK) {
+        puts("[OK]\n");
+    }
+    else {
+        puts("[Failed]");
+        return 1;
+    }
+#endif
+
+    /* periodically read temp and humidity values */
+    while (1) {
+        _measure(&dev);
+         xtimer_usleep(DELAY);
+    }
+
     /* start the shell */
     puts("Initialization successful - starting the shell now");
     gnrc_netreg_entry_t dump = GNRC_NETREG_ENTRY_INIT_PID(CONFIG_LORAMAC_DEFAULT_TX_PORT,
