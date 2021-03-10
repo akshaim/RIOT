@@ -30,13 +30,31 @@
 #include "dht_params.h"
 
 #define DELAY           (2 * US_PER_SEC)
+#define MODULE_DHT11
+
+static int _measure(dht_t *dev)
+{
+    int16_t temp, hum;
+    char temp_s[10];
+    char hum_s[10];
+
+    if (dht_read(dev, &temp, &hum) != DHT_OK) {
+            puts("Error reading values");
+            return -1;
+        }
+    
+    size_t n = fmt_s16_dfp(temp_s, temp, -1);
+    temp_s[n] = '\0';
+    n = fmt_s16_dfp(hum_s, hum, -1);
+    hum_s[n] = '\0';
+    printf("DHT values - temp: %s°C - relative humidity: %s%%\n",
+            temp_s, hum_s);
+    return 0;
+}
 
 int main(void)
 {
     dht_t dev;
-    int16_t temp, hum;
-    char temp_s[10];
-    char hum_s[10];
 
     puts("DHT temperature and humidity sensor test application\n");
 
@@ -52,20 +70,8 @@ int main(void)
 
     /* periodically read temp and humidity values */
     while (1) {
-        if (dht_read(&dev, &temp, &hum) != DHT_OK) {
-            puts("Error reading values");
-            continue;
-        }
-
-        size_t n = fmt_s16_dfp(temp_s, temp, -1);
-        temp_s[n] = '\0';
-        n = fmt_s16_dfp(hum_s, hum, -1);
-        hum_s[n] = '\0';
-
-        printf("DHT values - temp: %s°C - relative humidity: %s%%\n",
-                temp_s, hum_s);
-
-        xtimer_usleep(DELAY);
+        _measure(&dev);
+         xtimer_usleep(DELAY);
     }
 
     return 0;
