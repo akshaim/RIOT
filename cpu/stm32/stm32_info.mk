@@ -13,7 +13,6 @@ STM32_INFO     := $(shell echo $(CPU_MODEL_UPPERCASE) | sed -E -e 's/^STM32(F|L|
 STM32_TYPE     = $(word 1, $(STM32_INFO))
 STM32_FAMILY   = $(word 2, $(STM32_INFO))
 STM32_MODEL    = $(word 3, $(STM32_INFO))
-$(info $(STM32_MODEL) $(STM32_TYPE))
 ifneq (MP, $(STM32_TYPE))
   STM32_MODEL2   = $(word 4, $(STM32_INFO))
   STM32_MODEL3   = $(word 5, $(STM32_INFO))
@@ -33,7 +32,7 @@ else ifneq (,$(filter $(CPU_FAM),f1 f2 l1))
   CPU_CORE = cortex-m3
 else ifneq (,$(filter $(CPU_FAM),f3 f4 l4 mp1))
   CPU_CORE = cortex-m4f
-else ifneq (,$(filter $(CPU_FAM),g4 wb))
+else ifneq (,$(filter $(CPU_FAM),g4 wb wl))
   CPU_CORE = cortex-m4
 else ifeq (f7,$(CPU_FAM))
   CPU_CORE = cortex-m7

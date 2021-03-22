@@ -31,35 +31,21 @@
 
 #define CLOCK_HSE                       MHZ(32)
 
+/* use a core clock of 48MHz and run APBx buses at the same speed */
+// #define CONFIG_CLOCK_PLL_N              12
+#define CONFIG_USE_CLOCK_MSI            1
+#define CONFIG_CLOCK_APB1_DIV           1
+#define CONFIG_CLOCK_APB2_DIV           1
+
 #include "periph_cpu.h"
 #include "clk_conf.h"
-#include "cfg_i2c1_pb8_pb9.h"
-#include "cfg_rtt_default.h"
+// #include "cfg_i2c1_pb8_pb9.h"
+// #include "cfg_rtt_default.h"
 // #include "cfg_timer_tim2.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-/**
- * @name    DMA streams configuration
- * @{
- */
-static const dma_conf_t dma_config[] = {
-    { .stream = 1 },    /* DMA1 Channel 2 - SPI1_RX | USART3_TX */
-    { .stream = 2 },    /* DMA1 Channel 3 - SPI1_TX */
-    { .stream = 3 },    /* DMA1 Channel 4 - USART1_TX */
-    { .stream = 6 },    /* DMA1 Channel 7 - USART2_TX */
-};
-
-#define DMA_0_ISR  isr_dma1_channel2
-#define DMA_1_ISR  isr_dma1_channel3
-#define DMA_2_ISR  isr_dma1_channel4
-#define DMA_3_ISR  isr_dma1_channel7
-
-#define DMA_NUMOF           ARRAY_SIZE(dma_config)
-/** @} */
-
 
 /**
  * @name    Timer configuration
@@ -75,7 +61,7 @@ static const timer_conf_t timer_config[] = {
     }
 };
 
-#define TIMER_0_ISR         isr_tim5
+#define TIMER_0_ISR         isr_tim2
 
 #define TIMER_NUMOF         ARRAY_SIZE(timer_config)
 /** @} */
@@ -86,26 +72,33 @@ static const timer_conf_t timer_config[] = {
  */
 static const uart_conf_t uart_config[] = {
     {
-        .dev        = USART1,
-        .rcc_mask   = RCC_APB2ENR_USART1EN,
+        .dev        = LPUART1,
+        .rcc_mask   = RCC_APB1ENR2_LPUART1EN,
         .rx_pin     = GPIO_PIN(PORT_A, 3),
         .tx_pin     = GPIO_PIN(PORT_A, 2),
+        .rx_af      = GPIO_AF8,
+        .tx_af      = GPIO_AF8,
+        .bus        = APB12,
+        .irqn       = LPUART1_IRQn,
+        .type       = STM32_LPUART,
+        .clk_src    = 0, /* Use APB clock */
+    },
+    {
+        .dev        = USART1,
+        .rcc_mask   = RCC_APB2ENR_USART1EN,
+        .rx_pin     = GPIO_PIN(PORT_B, 7),
+        .tx_pin     = GPIO_PIN(PORT_B, 6),
         .rx_af      = GPIO_AF7,
         .tx_af      = GPIO_AF7,
         .bus        = APB2,
         .irqn       = USART1_IRQn,
-        // .type       = STM32_USART,
-        // .clk_src    = 0, /* Use APB clock */
-#ifdef MODULE_PERIPH_DMA
-        .dma        = 3,
-        .dma_chan   = 2
-#endif
+        .type       = STM32_USART,
+        .clk_src    = 0, /* Use APB clock */
     },
 };
 
-#define UART_0_ISR          (isr_usart2)
-#define UART_1_ISR          (isr_usart3)
-#define UART_2_ISR          (isr_usart1)
+#define UART_0_ISR          (isr_lpuart1)
+#define UART_1_ISR          (isr_usart1)
 
 #define UART_NUMOF          ARRAY_SIZE(uart_config)
 /** @} */

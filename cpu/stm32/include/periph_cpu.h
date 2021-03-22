@@ -175,6 +175,9 @@ extern "C" {
 typedef enum {
     APB1,           /**< APB1 bus */
     APB2,           /**< APB2 bus */
+#if defined(CPU_FAM_STM32WL)
+    APB3,
+#endif
 #if defined(CPU_FAM_STM32L4) || defined(CPU_FAM_STM32WB) || \
     defined(CPU_FAM_STM32G4) || defined(CPU_FAM_STM32G0) || \
     defined(CPU_FAM_STM32L5) || defined(CPU_FAM_STM32WL)
@@ -686,7 +689,8 @@ typedef struct {
 #endif
 #if defined(CPU_FAM_STM32L0) || defined(CPU_FAM_STM32L4) || \
     defined(CPU_FAM_STM32WB) || defined(CPU_FAM_STM32G4) || \
-    defined(CPU_FAM_STM32L5) || defined(CPU_FAM_STM32MP1)
+    defined(CPU_FAM_STM32L5) || defined(CPU_FAM_STM32MP1) || \
+    defined(CPU_FAM_STM32WL)
     uart_type_t type;       /**< hardware module type (USART or LPUART) */
     uint32_t clk_src;       /**< clock source used for UART */
 #endif
