@@ -330,7 +330,7 @@
 /* Configure 48MHz clock source */
 #define CLOCK_PLLQ                  ((CLOCK_PLL_SRC / CONFIG_CLOCK_PLL_M) * CONFIG_CLOCK_PLL_N) / CONFIG_CLOCK_PLL_Q
 
-#if CLOCK_PLLQ == MHZ(48)
+#if CLOCK_PLLQ == MHZ(48) && !defined(CPU_FAM_STM32WL)
 #define CLOCK48MHZ_USE_PLLQ         1
 #elif CONFIG_CLOCK_MSI == MHZ(48)
 #define CLOCK48MHZ_USE_MSI          1
