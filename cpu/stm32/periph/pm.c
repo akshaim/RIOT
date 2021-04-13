@@ -113,7 +113,7 @@ void pm_set(unsigned mode)
             PWR_CR_REG &= ~(PM_STOP_CONFIG | PM_STANDBY_CONFIG);
             PWR_CR_REG |= PM_STANDBY_CONFIG;
 #if defined(CPU_FAM_STM32L4) || defined(CPU_FAM_STM32WB) || \
-    defined(CPU_FAM_STM32G4) || defined(CPU_FAM_STM32L5)
+    defined(CPU_FAM_STM32G4) || defined(CPU_FAM_STM32L5) || defined(CPU_FAM_STM32WL)
 #if STM32L4_SRAM2_RETENTION
             PWR->CR3 |= PWR_CR3_RRS;
 #else
