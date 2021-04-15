@@ -115,6 +115,14 @@ static int cmd_info(int argc, char **argv)
 #endif
     printf("Number of pages:\t%i\n", (int)FLASHPAGE_NUMOF);
 
+    printf("BLock Size:\t%i\n", (int)FLASHPAGE_WRITE_BLOCK_SIZE);
+
+    printf("BLock Alignment:\t%i\n", (int)FLASHPAGE_WRITE_BLOCK_ALIGNMENT);
+
+    printf("Flash Erase State:\t%i\n", (int)FLASHPAGE_ERASE_STATE);
+
+    // printf("Custom page size:\t%i\n", (int)PERIPH_FLASHPAGE_CUSTOM_PAGESIZES);
+
 #ifdef FLASHPAGE_RWWEE_NUMOF
     printf("RWWEE Flash start addr:\t0x%08x\n", (int)CPU_FLASH_RWWEE_BASE);
     printf("RWWEE Number of pages:\t%i\n", (int)FLASHPAGE_RWWEE_NUMOF);
