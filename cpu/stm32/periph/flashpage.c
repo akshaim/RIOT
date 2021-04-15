@@ -188,9 +188,11 @@ static void _erase_page(void *page_addr)
 void flashpage_erase(unsigned page)
 {
     assert(page < (int)FLASHPAGE_NUMOF);
+    printf("Page value  : %d\n", page);
 
     /* ensure there is no attempt to write to CPU2 protected area */
 #if defined(CPU_FAM_STM32WB) || defined(CPU_FAM_STM32WL)
+    printf("Page value must be less than : %d\n", (int)(FLASH->SFR & FLASH_SFR_SFSA));
     assert(page < (int)(FLASH->SFR & FLASH_SFR_SFSA));
 #endif
 
