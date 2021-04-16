@@ -162,6 +162,7 @@ Test *tests_mtd_flashpage_tests(void)
 int main(void)
 {
     TESTS_START();
+    puts("start");
     TESTS_RUN(tests_mtd_flashpage_tests());
     TESTS_END();
     return 0;
