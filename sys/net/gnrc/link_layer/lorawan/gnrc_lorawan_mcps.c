@@ -379,10 +379,7 @@ void gnrc_lorawan_event_no_rx(gnrc_lorawan_t *mac)
          CONFIG_LORAMAC_DEFAULT_ADR_ACK_DELAY)) && mac->last_dr > 0) {
         DEBUG("gnrc_lorawan_mcps: ADRACKReq: Decrement DR\n");
         mac->last_dr--;
-
-        if (!mac->last_dr) {
-            mac->mcps.adr_ack_cnt = 0;
-        }
+        mac->mcps.adr_ack_cnt = CONFIG_LORAMAC_DEFAULT_ADR_ACK_LIMIT;
     }
 
     /* Otherwise check if retransmission should be handled */
