@@ -26,8 +26,9 @@
 #include "sx126x.h"
 #include "sx126x_hal.h"
 
-#define ENABLE_DEBUG 0
+#define ENABLE_DEBUG 1
 #include "debug.h"
+#include "cpu.h"
 
 #define SX126X_SPI_SPEED    (SPI_CLK_1MHZ)
 #define SX126X_SPI_MODE     (SPI_MODE_0)
@@ -39,16 +40,34 @@ sx126x_hal_status_t sx126x_hal_write(const void *context,
     (void)data;
     (void)data_length;
     sx126x_t *dev = (sx126x_t *)context;
+    // DEBUG("Txinsdsdsdsd \n");
+
+    // DEBUG("Pulling SPINSS Low \n");
+    // PWR->SUBGHZSPICR &= ~PWR->SUBGHZSPICR;
+
+    // DEBUG("Pulling SPINSS High \n");
+    // PWR->SUBGHZSPICR |= ~PWR->SUBGHZSPICR;
 
     /* wait for the device to not be busy anymore */
-    while (gpio_read(dev->params->busy_pin)) {}
+    // while (gpio_read(dev->params->busy_pin)) {}
 
+    // while (PWR->SR2 & PWR_SR2_RFBUSYMS) {}
+
+    // DEBUG("Not busy \n");
+
+    //check the register
     spi_acquire(dev->params->spi, SPI_CS_UNDEF, SX126X_SPI_MODE, SX126X_SPI_SPEED);
-    spi_transfer_bytes(dev->params->spi, dev->params->nss_pin, data_length != 0, command, NULL,
+
+    PWR->SUBGHZSPICR &= ~PWR_SUBGHZSPICR_NSS; // PULL NSS LOW
+
+    // clear the NSS bit
+    // 2nd parm NSS Bit UNDEF
+    spi_transfer_bytes(dev->params->spi, SPI_CS_UNDEF, data_length != 0, command, NULL,
                        command_length);
     if (data_length) {
-        spi_transfer_bytes(dev->params->spi, dev->params->nss_pin, false, data, NULL, data_length);
+        spi_transfer_bytes(dev->params->spi, SPI_CS_UNDEF, false, data, NULL, data_length);
     }
+    PWR->SUBGHZSPICR |= PWR_SUBGHZSPICR_NSS; //PULL NSS UP
     spi_release(dev->params->spi);
     return 0;
 }

@@ -26,6 +26,20 @@
 extern "C" {
 #endif
 
+
+/**
+ * @name    Sub-GHz radio (LoRa) configuration
+ * @{
+ */
+#define SX126X_PARAM_SPI                    (SPI_DEV(0))
+// #define SX126X_PARAM_SPI_NSS                GPIO_PIN(PORT_A, 4)
+
+#define SX126X_PARAM_RESET                  GPIO_PIN(PORT_A, 11)
+#define SX126X_PARAM_BUSY                   GPIO_PIN(PORT_A, 12)
+// #define SX126X_PARAM_DIO1                   GPIO_PIN(PORT_B, 4)
+// #define SX126X_PARAM_REGULATOR              SX126X_REG_MODE_LDO
+/** @} */
+
 /**
  * @name    LED pin definitions and handlers
  * @{

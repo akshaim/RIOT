@@ -29,8 +29,9 @@
 #include "sx126x.h"
 #include "sx126x_params.h"
 
-#define ENABLE_DEBUG 0
+#define ENABLE_DEBUG 1
 #include "debug.h"
+// #include "xtimer.h"
 
 #ifndef CONFIG_SX126X_PKT_TYPE_DEFAULT
 #define CONFIG_SX126X_PKT_TYPE_DEFAULT          (SX126X_PKT_TYPE_LORA)
@@ -77,6 +78,8 @@ static void sx126x_init_default_config(sx126x_t *dev)
 {
     /* packet type must be set first */
     sx126x_set_pkt_type(dev, SX126X_PKT_TYPE_LORA);
+    DEBUG ("set SX126X_PKT_TYPE_LORA");
+    
     sx126x_set_channel(dev, CONFIG_SX126X_CHANNEL_DEFAULT);
 
     /* Configure PA optimal settings for maximum output power
@@ -135,11 +138,28 @@ static void _dio1_isr(void *arg)
     netdev_trigger_event_isr((netdev_t *)arg);
 }
 
-int sx126x_init(sx126x_t *dev)
+int sx126x_init(sx126x_t *dev) //check
 {
     /* Setup SPI for SX126X */
-    int res = spi_init_cs(dev->params->spi, dev->params->nss_pin);
+    
+    // printf("PWR->CR1: ");
+    // int i = PWR->CR1;   
+    // printBits(sizeof(i), &i);
 
+    // DEBUG("Pulling SPINSS Low \n");
+    // PWR->SUBGHZSPICR &= ~PWR->SUBGHZSPICR;
+
+    // DEBUG("Pulling SPINSS High \n");
+    // PWR->SUBGHZSPICR |= ~PWR->SUBGHZSPICR;
+
+    /* Radio Reset  */
+
+    DEBUG("Radio Reset\n");
+    RCC->CSR |= RCC_CSR_RFRST;
+    RCC->CSR &= ~RCC_CSR_RFRST;
+
+    DEBUG("SPI_NSS\n");
+    int res = spi_init_cs(dev->params->spi, dev->params->nss_pin); //Check
     if (res != SPI_OK) {
         DEBUG("[sx126x] error: failed to initialize SPI_%i device (code %i)\n",
               dev->params->spi, res);

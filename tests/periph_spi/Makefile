@@ -10,6 +10,7 @@ ifeq (,$(filter $(BOARD),$(LOW_MEMORY_BOARDS)))
   FEATURES_OPTIONAL += periph_spi_reconfigure
 endif
 
+
 USEMODULE += xtimer
 USEMODULE += shell
 USEMODULE += shell_commands

@@ -83,45 +83,58 @@ static const uart_conf_t uart_config[] = {
  * @{
  */
 static const spi_conf_t spi_config[] = {
+    // {
+    //     .dev      = SPI1,
+    //     .mosi_pin = GPIO_PIN(PORT_A, 7),
+    //     .miso_pin = GPIO_PIN(PORT_A, 6),
+    //     .sclk_pin = GPIO_PIN(PORT_A, 5),
+    //     .cs_pin   = GPIO_UNDEF,
+    //     .mosi_af  = GPIO_AF5,
+    //     .miso_af  = GPIO_AF5,
+    //     .sclk_af  = GPIO_AF5,
+    //     .cs_af    = GPIO_AF5,
+    //     .rccmask  = RCC_APB2ENR_SPI1EN,
+    //     .apbbus   = APB2,
+    // },
     {
-        .dev      = SPI1,
-        .mosi_pin = GPIO_PIN(PORT_A, 7),
-        .miso_pin = GPIO_PIN(PORT_A, 6),
-        .sclk_pin = GPIO_PIN(PORT_A, 5),
-        .cs_pin   = GPIO_UNDEF,
-        .mosi_af  = GPIO_AF5,
-        .miso_af  = GPIO_AF5,
-        .sclk_af  = GPIO_AF5,
-        .cs_af    = GPIO_AF5,
-        .rccmask  = RCC_APB2ENR_SPI1EN,
-        .apbbus   = APB2,
-    }
+        .dev      = SUBGHZSPI, /* Internally connected to Sub-GHz radio Modem  */
+        // .mosi_pin = GPIO_PIN(PORT_A, 7),
+        // .miso_pin = GPIO_PIN(PORT_A, 6),
+        // .sclk_pin = GPIO_PIN(PORT_A, 5),
+        // .cs_pin   = GPIO_UNDEF,
+        // .mosi_af  = GPIO_AF13,
+        // .miso_af  = GPIO_AF13,
+        // .sclk_af  = GPIO_AF13,
+        // .cs_af    = GPIO_AF13,
+        .rccmask  = RCC_APB3ENR_SUBGHZSPIEN, 
+        .apbbus   = APB3,
+    },
 };
 
 #define SPI_NUMOF           ARRAY_SIZE(spi_config)
 /** @} */
 
-/**
- * @name    I2C configuration
- * @{
- */
-static const i2c_conf_t i2c_config[] = {
-    {
-        .dev            = I2C2,
-        .speed          = I2C_SPEED_NORMAL,
-        .scl_pin        = GPIO_PIN(PORT_A, 12),
-        .sda_pin        = GPIO_PIN(PORT_A, 11),
-        .scl_af         = GPIO_AF4,
-        .sda_af         = GPIO_AF4,
-        .bus            = APB1,
-        .rcc_mask       = RCC_APB1ENR1_I2C2EN,
-        .irqn           = I2C2_ER_IRQn,
-    }
-};
+// /**
+//  * @name    I2C configuration
+//  * @{
+//  */
+// static const i2c_conf_t i2c_config[] = {
+//     {
+//         .dev            = I2C2,
+//         .speed          = I2C_SPEED_NORMAL,
+//         .scl_pin        = GPIO_PIN(PORT_A, 12),
+//         .sda_pin        = GPIO_PIN(PORT_A, 11),
+//         .scl_af         = GPIO_AF4,
+//         .sda_af         = GPIO_AF4,
+//         .bus            = APB1,
+//         .rcc_mask       = RCC_APB1ENR1_I2C2EN,
+//         .irqn           = I2C2_ER_IRQn,
+//     }
+// };
 
-#define I2C_1_ISR           isr_i2c2_er
+// #define I2C_1_ISR           isr_i2c2_er
 
-#define I2C_NUMOF           ARRAY_SIZE(i2c_config)
+// #define I2C_NUMOF           ARRAY_SIZE(i2c_config)
 /** @} */
 
 #ifdef __cplusplus
