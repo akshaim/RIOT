@@ -20,13 +20,54 @@
  */
 
 #include <stdio.h>
+#include <cpu.h>
+#include <string.h>
+#include <stdlib.h>
+#include "periph/spi.h"
+
+void printBits(size_t const size, void const * const ptr)
+{
+    unsigned char *b = (unsigned char*) ptr;
+    unsigned char byte;
+    int i, j;
+    
+    for (i = size-1; i >= 0; i--) {
+        for (j = 7; j >= 0; j--) {
+            byte = (b[i] >> j) & 1;
+            printf("%u", byte);
+        }
+    }
+    puts("");
+}
 
 int main(void)
 {
-    puts("Hello World!");
 
-    printf("You are running RIOT on a(n) %s board.\n", RIOT_BOARD);
-    printf("This board features a(n) %s MCU.\n", RIOT_MCU);
+    printf("RCC->CFGR: ");
+    printBits(sizeof((int)(RCC->CFGR)), (int*)&(RCC->CFGR));
 
+    printf("RCC->CR: ");
+    printBits(sizeof((int)(RCC->CR)), (int*)&(RCC->CR));
+
+    printf("RCC->EXTCFGR: ");
+    printBits(sizeof((int)(RCC->EXTCFGR)), (int*)&(RCC->EXTCFGR));
+
+    printf("RCC->APB3RSTR: ");
+    printBits(sizeof((int)(RCC->APB3RSTR)), (int*)&(RCC->APB3RSTR));
+
+    printf("RCC->APB3ENR: ");
+    printBits(sizeof((int)(RCC->APB3ENR)), (int*)&(RCC->APB3ENR));
+
+    printf("GPIOA->AFRL: ");
+    printBits(sizeof((int)(GPIOA->AFR[0])), (int*)&(GPIOA->AFR[0]));
+    
+    while(1) {
+    PWR->SUBGHZSPICR |= PWR_SUBGHZSPICR_NSS;
+    printf("PWR->SUBGHZSPICR: ");
+    printBits(sizeof((int)(PWR->SUBGHZSPICR)), (int*)&(PWR->SUBGHZSPICR));
+    PWR->SUBGHZSPICR &= ~PWR_SUBGHZSPICR_NSS;
+    printf("PWR->SUBGHZSPICR: ");
+    printBits(sizeof((int)(PWR->SUBGHZSPICR)), (int*)&(PWR->SUBGHZSPICR));
+    }
     return 0;
 }
