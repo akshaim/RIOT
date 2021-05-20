@@ -31,7 +31,6 @@
 
 #define ENABLE_DEBUG 1
 #include "debug.h"
-// #include "xtimer.h"
 
 #ifndef CONFIG_SX126X_PKT_TYPE_DEFAULT
 #define CONFIG_SX126X_PKT_TYPE_DEFAULT          (SX126X_PKT_TYPE_LORA)
@@ -140,26 +139,8 @@ static void _dio1_isr(void *arg)
 
 int sx126x_init(sx126x_t *dev) //check
 {
-    /* Setup SPI for SX126X */
     
-    // printf("PWR->CR1: ");
-    // int i = PWR->CR1;   
-    // printBits(sizeof(i), &i);
-
-    // DEBUG("Pulling SPINSS Low \n");
-    // PWR->SUBGHZSPICR &= ~PWR->SUBGHZSPICR;
-
-    // DEBUG("Pulling SPINSS High \n");
-    // PWR->SUBGHZSPICR |= ~PWR->SUBGHZSPICR;
-
-    /* Radio Reset  */
-
-    DEBUG("Radio Reset\n");
-    RCC->CSR |= RCC_CSR_RFRST;
-    RCC->CSR &= ~RCC_CSR_RFRST;
-
-    DEBUG("SPI_NSS\n");
-    int res = spi_init_cs(dev->params->spi, dev->params->nss_pin); //Check
+    int res = spi_init_cs(dev->params->spi, SPI_CS_UNDEF); //Check
     if (res != SPI_OK) {
         DEBUG("[sx126x] error: failed to initialize SPI_%i device (code %i)\n",
               dev->params->spi, res);
@@ -185,6 +166,7 @@ int sx126x_init(sx126x_t *dev) //check
     }
 
     /* Reset the device */
+    DEBUG("[sx126x_init] : Reset the device\n");
     sx126x_reset(dev);
 
     /* Configure the power regulator mode */
@@ -220,6 +202,11 @@ int sx126x_init(sx126x_t *dev) //check
     }
 
     return res;
+}
+
+uint8_t sx126x_get_radio_status(const sx126x_t *dev)
+{
+    return dev->mod_params.bw - SX126X_LORA_BW_125;
 }
 
 uint32_t sx126x_get_channel(const sx126x_t *dev)

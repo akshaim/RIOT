@@ -48,20 +48,20 @@ static char message[SX126X_MAX_PAYLOAD_LEN];
 
 static sx126x_t sx126x;
 
-void printBits(size_t const size, void const * const ptr)
-{
-    unsigned char *b = (unsigned char*) ptr;
-    unsigned char byte;
-    int i, j;
+// void printBits(size_t const size, void const * const ptr)
+// {
+//     unsigned char *b = (unsigned char*) ptr;
+//     unsigned char byte;
+//     int i, j;
     
-    for (i = size-1; i >= 0; i--) {
-        for (j = 7; j >= 0; j--) {
-            byte = (b[i] >> j) & 1;
-            printf("%u", byte);
-        }
-    }
-    puts("");
-}
+//     for (i = size-1; i >= 0; i--) {
+//         for (j = 7; j >= 0; j--) {
+//             byte = (b[i] >> j) & 1;
+//             printf("%u", byte);
+//         }
+//     }
+//     puts("");
+// }
 
 static void _event_cb(netdev_t *dev, netdev_event_t event)
 {
@@ -295,48 +295,6 @@ static int sx126x_tx_cmd(netdev_t *netdev, int argc, char **argv)
         .iol_base = argv[2],
         .iol_len = (strlen(argv[2]) + 1)
     };
-
-    printf("[Last bit must be 1]RCC->APB3ENR: ");
-    printBits(sizeof((int)(RCC->APB3ENR)), (int*)&(RCC->APB3ENR));
-
-    printf("[Last bit must be 1]RCC->APB3SMENR: ");
-    printBits(sizeof((int)(RCC->APB3SMENR)), (int*)&(RCC->APB3SMENR));
-
-    /* Radio Reset Status */
-    printf("RCC->CSR: ");
-    printBits(sizeof((int)(RCC->CSR)), (int*)&(RCC->CSR));
-
-    /* Power */
-    printf("PWR->CR5: ");
-    printBits(sizeof((int)(PWR->CR5)), (int*)&(PWR->CR5));
-    printf("PWR->SR2: ");
-    printBits(sizeof((int)(PWR->SR2)), (int*)&(PWR->SR2));
-    // printf("SUBGHZ->SMPSC0R: ");
-    // printBits(sizeof((int)(SUBGHZ->SMPSC0R)), (int*)&(SUBGHZ->SMPSC0R));
-    // printf("SUBGHZ->SMPSC2R: ");
-    // printBits(sizeof((int)(SUBGHZ->SMPSC2R)), (int*)&(SUBGHZ->SMPSC2R));
-
-    /* Radio NSS */
-    printf("PWR->CR1: ");
-    printBits(sizeof((int)(PWR->CR1)), (int*)&(PWR->CR1));
-    printf("PWR->SUBGHZSPICR: ");
-    printBits(sizeof((int)(PWR->SUBGHZSPICR)), (int*)&(PWR->SUBGHZSPICR));
-
-    printf("Pulling SPINSS Low \n");
-    // PWR->SUBGHZSPICR &= ~PWR->SUBGHZSPICR;
-
-    printf("PWR->CR1: ");
-    printBits(sizeof((int)(PWR->CR1)), (int*)&(PWR->CR1));
-    printf("PWR->SUBGHZSPICR: ");
-    printBits(sizeof((int)(PWR->SUBGHZSPICR)), (int*)&(PWR->SUBGHZSPICR));
-    
-    printf("Pulling SPINSS High \n");
-    PWR->SUBGHZSPICR |= ~PWR->SUBGHZSPICR;
-
-    printf("PWR->CR1: ");
-    printBits(sizeof((int)(PWR->CR1)), (int*)&(PWR->CR1));
-    printf("PWR->SUBGHZSPICR: ");
-    printBits(sizeof((int)(PWR->SUBGHZSPICR)), (int*)&(PWR->SUBGHZSPICR));
 
     if (netdev->driver->send(netdev, &iolist) == -ENOTSUP) {
         puts("Cannot send: radio is still transmitting");
