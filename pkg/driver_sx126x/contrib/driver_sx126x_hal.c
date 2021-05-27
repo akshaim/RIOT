@@ -39,6 +39,8 @@ uint32_t SystemCoreClock  = 4000000UL; /*CPU1: M4 on MSI clock after startup (4M
 #define SX126X_SPI_SPEED    (SPI_CLK_5MHZ)
 #define SX126X_SPI_MODE     (SPI_MODE_0)
 
+static bool sx126x_radio_sleepstatus = false;
+
 #ifdef ENABLE_DEBUG
 void printBits(size_t const size, void const * const ptr)
 {
@@ -81,7 +83,7 @@ static void PWR_SetRadioBusyTrigger(uint32_t RadioBusyTrigger)
   MODIFY_REG(PWR->CR3, PWR_CR3_EWRFBUSY, RadioBusyTrigger);
 }
 
-static uint32_t SUBGHZ_WaitOnBusy(void)
+static uint32_t sx126x_radio_waitonbusy(void)
 {
     uint32_t count;
     uint32_t mask;
@@ -95,6 +97,7 @@ static uint32_t SUBGHZ_WaitOnBusy(void)
         if (count == 0U)
         {
             DEBUG("[ERROR WaitOnBusy - Error] \n");
+            return 1;
             break;
     }
     count--;
@@ -103,6 +106,19 @@ static uint32_t SUBGHZ_WaitOnBusy(void)
     return 0;
 }
 
+static uint32_t sx126x_radio_checkdeviceready(void)
+{
+  if (sx126x_radio_sleepstatus == true)
+  {
+    DEBUG("[sx126x_radio_checkdeviceready] : Wakeup radio \n");
+    PWR->SUBGHZSPICR &= ~PWR_SUBGHZSPICR_NSS; // PULL NSS LOW
+
+    ztimer_sleep(ZTIMER_USEC, 1000);
+
+    PWR->SUBGHZSPICR |= PWR_SUBGHZSPICR_NSS; //PULL NSS UP
+  }
+  return (sx126x_radio_waitonbusy());
+}
 
 sx126x_hal_status_t sx126x_hal_write(const void *context,
                                      const uint8_t *command, const uint16_t command_length,
@@ -113,18 +129,7 @@ sx126x_hal_status_t sx126x_hal_write(const void *context,
     sx126x_t *dev = (sx126x_t *)context;
     // while (gpio_read(dev->params->busy_pin)) {}
 
-    DEBUG("[sx126x_hal] WRITE\n");
-    // if(SX126xGetOperatingMode( ) == MODE_SLEEP) {
-    PWR->SUBGHZSPICR &= ~PWR_SUBGHZSPICR_NSS; // PULL NSS LOW
-
-    ztimer_sleep(ZTIMER_USEC, 1000);
-
-    /* NSS = 1 */
-    PWR->SUBGHZSPICR |= PWR_SUBGHZSPICR_NSS; //PULL NSS UP
-    // }
-
-    SUBGHZ_WaitOnBusy();
-    // while ((LL_PWR_IsActiveFlag_RFBUSYS() & LL_PWR_IsActiveFlag_RFBUSYMS()) == 1UL);
+    while(sx126x_radio_checkdeviceready()){}
 
     // while (PWR->SR2 & PWR_SR2_RFBUSYMS) {}
     // DEBUG("[sx126x_hal] Radio busy done\n");
@@ -138,10 +143,16 @@ sx126x_hal_status_t sx126x_hal_write(const void *context,
     // printf("aFTER aCQUIRE SUBGHZSPI->CR1: ");
     // printBits(sizeof((int)(SUBGHZSPI->CR1)), (int*)&(SUBGHZSPI->CR1));
 
-
-    PWR->SUBGHZSPICR &= ~PWR_SUBGHZSPICR_NSS; // PULL NSS LOW
     // clear the NSS bit
     // 2nd parm NSS Bit UNDEF
+    if(command[0] == 0x84U || command[0] == 0x94U) {
+      sx126x_radio_sleepstatus = true;
+    }
+    else {
+      sx126x_radio_sleepstatus = false;
+    }
+
+    PWR->SUBGHZSPICR &= ~PWR_SUBGHZSPICR_NSS; // PULL NSS LOW
 
     spi_transfer_bytes(dev->params->spi, SPI_CS_UNDEF, data_length != 0, command, NULL,
                        command_length);
@@ -161,17 +172,10 @@ sx126x_hal_status_t sx126x_hal_read(const void *context,
     DEBUG("[sx126x_hal] READ \n");
     sx126x_t *dev = (sx126x_t *)context;
 
-    PWR->SUBGHZSPICR &= ~PWR_SUBGHZSPICR_NSS; // PULL NSS LOW
-
-    ztimer_sleep(ZTIMER_USEC, 1000);
-
-    /* NSS = 1 */
-    PWR->SUBGHZSPICR |= PWR_SUBGHZSPICR_NSS; //PULL NSS UP
-
-    SUBGHZ_WaitOnBusy();
+    while(sx126x_radio_checkdeviceready()){}
 
     /* wait for the device to not be busy anymore */
-    while (gpio_read(dev->params->busy_pin)) {}
+    // while (gpio_read(dev->params->busy_pin)) {}
 
     spi_acquire(dev->params->spi, SPI_CS_UNDEF, SX126X_SPI_MODE, SX126X_SPI_SPEED);
     PWR->SUBGHZSPICR &= ~PWR_SUBGHZSPICR_NSS; // PULL NSS LOW
@@ -193,13 +197,13 @@ sx126x_hal_status_t sx126x_hal_reset(const void *context)
     gpio_set(dev->params->reset_pin);
     gpio_clear(dev->params->reset_pin);
     /* it takes 100us for the radio to be ready after reset */
-    ztimer_sleep(ZTIMER_USEC, 100);
+    // ztimer_sleep(ZTIMER_USEC, 100);
     gpio_set(dev->params->reset_pin);
     
 // #if defined(CPU_FAM_STM32WL)
     RCC->CSR |= RCC_CSR_RFRST; //Reset Radio
-    ztimer_sleep(ZTIMER_USEC, 1000);
     RCC->CSR &= ~RCC_CSR_RFRST; // Disable radio reset
+    ztimer_sleep(ZTIMER_USEC, 100);
     
     /* Wait while reset is done */
     while (IsRFUnderReset() != 0UL){}
@@ -215,6 +219,8 @@ sx126x_hal_status_t sx126x_hal_reset(const void *context)
 
     /* Clear Pending Flag */
     PWR->SCR = PWR_SCR_CWRFBUSYF;
+
+    sx126x_radio_sleepstatus = true;
 
     return 0;
 }
