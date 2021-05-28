@@ -37,7 +37,7 @@ extern "C" {
 #define SX126X_PARAM_RESET                  GPIO_PIN(PORT_B, 6) //DUMMY Value
 #define SX126X_PARAM_BUSY                   GPIO_PIN(PORT_B, 7) //DUMMY Value
 #define SX126X_PARAM_DIO1                   GPIO_PIN(PORT_B, 8) //DUMMY Value
-#define SX126X_PARAM_REGULATOR              SX126X_REG_MODE_LDO
+// #define SX126X_PARAM_REGULATOR              SX126X_REG_MODE_LDO
 /** @} */
 
 /**
