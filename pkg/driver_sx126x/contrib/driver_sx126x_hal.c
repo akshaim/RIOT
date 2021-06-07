@@ -108,15 +108,15 @@ static uint32_t sx126x_radio_waitonbusy(void)
 
 static uint32_t sx126x_radio_checkdeviceready(void)
 {
-  if (sx126x_radio_sleepstatus == true)
-  {
+  // if (sx126x_radio_sleepstatus == true)
+  // {
     DEBUG("[sx126x_radio_checkdeviceready] : Wakeup radio \n");
     PWR->SUBGHZSPICR &= ~PWR_SUBGHZSPICR_NSS; // PULL NSS LOW
 
     ztimer_sleep(ZTIMER_USEC, 1000);
 
     PWR->SUBGHZSPICR |= PWR_SUBGHZSPICR_NSS; //PULL NSS UP
-  }
+  // }
   return (sx126x_radio_waitonbusy());
 }
 
@@ -168,7 +168,6 @@ sx126x_hal_status_t sx126x_hal_read(const void *context,
                                     const uint8_t *command, const uint16_t command_length,
                                     uint8_t *data, const uint16_t data_length)
 {
-    // while(1){}
     DEBUG("[sx126x_hal] READ \n");
     sx126x_t *dev = (sx126x_t *)context;
 
