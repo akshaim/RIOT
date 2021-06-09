@@ -32,6 +32,8 @@
 #define ENABLE_DEBUG 1
 #include "debug.h"
 
+#include <string.h> // to be removed
+
 #ifndef CONFIG_SX126X_PKT_TYPE_DEFAULT
 #define CONFIG_SX126X_PKT_TYPE_DEFAULT          (SX126X_PKT_TYPE_LORA)
 #endif
@@ -52,7 +54,8 @@
 #define SX126X_CAL_DEFAULT                      (0x7F)
 #endif
 
-#define REG_XTA_TRIM 0x0911
+#define REG_XTA_TRIM                             0x0911
+
 
 void sx126x_setup(sx126x_t *dev, const sx126x_params_t *params, uint8_t index)
 {
@@ -120,12 +123,12 @@ static void sx126x_init_default_config(sx126x_t *dev)
 
     uint8_t reg_values = 0;
     sx126x_read_register(dev, 0x08E7, &reg_values, 1 );
-    DEBUG("OCP Value %x",reg_values);
+    DEBUG("OCP Value : %x\n",reg_values);
 
     sx126x_set_tx_params(dev, CONFIG_SX126X_TX_POWER_DEFAULT, CONFIG_SX126X_RAMP_TIME_DEFAULT);
 
     /* packet type must be set first */
-    sx126x_set_pkt_type(dev, SX126X_PKT_TYPE_GFSK);
+    sx126x_set_pkt_type(dev, SX126X_PKT_TYPE_LORA);
 
     sx126x_set_channel(dev, CONFIG_SX126X_CHANNEL_DEFAULT);
 
@@ -185,51 +188,43 @@ int sx126x_init(sx126x_t *dev) //check
     DEBUG("[sx126x_init] : Reset the device\n");
     sx126x_reset(dev);
 
-    sx126x_set_reg_mode(dev, dev->params->regulator);
-
     sx126x_set_standby(dev, SX126X_STANDBY_CFG_RC);
-
-    sx126x_set_buffer_base_address(dev, 0x00, 0x00);
-    uint8_t test = 0xFF;
-    DEBUG("[sx126x_init] Write buffer : %x\n", test);
-    sx126x_write_buffer(dev, 0x00, &test, 1);
-    test = 0x03; // some random value
-    sx126x_read_buffer(dev, 0x00, &test, 1);
-    DEBUG("[sx126x_init] Read buffer : %x\n", test);
-
-    // uint8_t reg_value = 0;
-    // sx126x_read_register( dev, REG_XTA_TRIM, &reg_value, 1 );
-    // DEBUG("Trim value before reset : %x\n", reg_value);
-    // sx126x_write_register(dev, REG_XTA_TRIM, ( const uint8_t[] ){ 0x00 },1);
-    // sx126x_read_register( dev, REG_XTA_TRIM, &reg_value, 1 );
-    // DEBUG("Trim value after reset : %x\n", reg_value);
-    while (1){}
-
-    /* Configure the power regulator mode */
-    sx126x_set_reg_mode(dev, dev->params->regulator);
-    // sx126x_read_register()
 
     sx126x_set_dio3_as_tcxo_ctrl(dev, SX126X_TCXO_CTRL_1_7V, 10 << 6 );
 
+    sx126x_write_register(dev, REG_XTA_TRIM, ( const uint8_t[] ){ 0x00 },1);
     sx126x_cal(dev, SX126X_CAL_DEFAULT);
+
+    /* Configure the power regulator mode */
+    sx126x_set_reg_mode(dev, dev->params->regulator);
 
     sx126x_set_buffer_base_address(dev, 0x00, 0x00);
 
+    /* Test Buffer */
+    // uint8_t test[128];
+    // for (int i=0;i<128;i++) {
+    //     test[i] = i;
+    // }
+    // sx126x_write_buffer(dev, 0x00, test, 128);
+    // memset(test, '0', 128);
+    // sx126x_read_buffer(dev, 0x00, test, 128);
+    // for (int i=0;i<128;i++) {
+    //     DEBUG("%02x ", test[i]);
+    // }
+    // DEBUG("\n");
+
+    /* Test register */
+    // uint8_t reg_value = 0;
+    // uint8_t foo = 0x44;
+    // sx126x_read_register( dev, REG_s, &reg_value, 1 );
+    // DEBUG("Value before reset : %x\n", reg_value);
+    // sx126x_write_register(dev, REG_s, &foo,1);
+    // sx126x_read_register( dev, REG_s, &reg_value, 1 );
+    // DEBUG("Value after reset : %x\n", reg_value);
+    // while (1){}
+
     /* Initialize radio with the default parameters */
     sx126x_init_default_config(dev);
-
-    // /* Configure available IRQs */
-    // const uint16_t irq_mask = (
-    //     SX126X_IRQ_TX_DONE |
-    //     SX126X_IRQ_RX_DONE |
-    //     SX126X_IRQ_PREAMBLE_DETECTED |
-    //     SX126X_IRQ_HEADER_VALID |
-    //     SX126X_IRQ_HEADER_ERROR |
-    //     SX126X_IRQ_CRC_ERROR |
-    //     SX126X_IRQ_CAD_DONE |
-    //     SX126X_IRQ_CAD_DETECTED |
-    //     SX126X_IRQ_TIMEOUT
-    //     );
 
     sx126x_set_dio_irq_params(dev, 0xFFFF, 0xFFFF, 0, 0);
 
